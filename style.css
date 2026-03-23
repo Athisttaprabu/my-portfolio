@@ -775,24 +775,28 @@ header {
 
 .article-container {
     max-width: 1000px; /* Slightly wider */
-    margin: 140px auto 80px;
+    margin: 200px auto 80px; /* Significant top margin for absolute clearance */
     padding: 0 40px;
 }
 
 .back-btn-header {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--accent);
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--accent);
+    border-radius: 50%;
     transition: var(--transition);
-    white-space: nowrap; /* Prevent cutting off text */
+    text-decoration: none;
 }
 
 .back-btn-header:hover {
-    color: var(--text-primary);
-    transform: translateX(-5px);
+    background: var(--accent);
+    color: #ffffff;
+    transform: scale(1.1);
 }
 
 /* Article Cards for Landing Page */

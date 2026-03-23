@@ -645,3 +645,132 @@ footer {
     color: var(--accent);
     transform: translateY(-2px);
 }
+
+/* Code Block Styles */
+.code-container {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    margin: 20px 0;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 1px solid #333;
+    position: relative;
+    text-align: left;
+}
+
+.code-header {
+    background-color: #2d2d2d;
+    padding: 8px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #444;
+}
+
+.code-header .language {
+    color: #aeafad;
+    font-size: 0.8rem;
+    font-family: var(--font-main);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.copy-btn {
+    background-color: transparent;
+    border: 1px solid #555;
+    color: #aeafad;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-main);
+}
+
+.copy-btn:hover {
+    background-color: #444;
+    color: #fff;
+    border-color: var(--accent);
+}
+
+.copy-btn.copied {
+    background-color: var(--accent);
+    color: white;
+    border-color: var(--accent);
+}
+
+pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #dcdcaa;
+}
+
+code {
+    font-family: inherit;
+}
+
+/* Minimal Syntax Highlighting */
+.keyword { color: #569cd6; } /* blue */
+.string { color: #ce9178; }  /* orange/red */
+.comment { color: #6a9955; } /* green */
+.number { color: #b5cea8; }  /* light green */
+.func { color: #dcdcaa; }    /* yellow */
+
+/* Article Page Layout */
+.article-container {
+    max-width: 900px;
+    margin: 120px auto 60px;
+    padding: 0 20px;
+}
+
+.article-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.article-header h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.article-header p {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+}
+
+.article-content {
+    background-color: var(--bg-card);
+    padding: 60px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+}
+
+.article-content h2 {
+    margin: 40px 0 20px;
+    font-size: 1.8rem;
+    border-left: 5px solid var(--accent);
+    padding-left: 15px;
+}
+
+.article-content p {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    line-height: 1.8;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.back-link:hover {
+    gap: 12px;
+}

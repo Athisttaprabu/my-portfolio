@@ -70,4 +70,30 @@ document.addEventListener('DOMContentLoaded', () => {
         section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
         observer.observe(section);
     });
+
+    // Copy to Clipboard logic
+    const copyToClipboard = (text, btn) => {
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            btn.classList.add('copied');
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('copied');
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    };
+
+    // Global listener for copy buttons
+    document.addEventListener('click', (e) => {
+        const copyBtn = e.target.closest('.copy-btn');
+        if (copyBtn) {
+            const container = copyBtn.closest('.code-container');
+            const codeElement = container.querySelector('code');
+            copyToClipboard(codeElement.innerText, copyBtn);
+        }
+    });
 });

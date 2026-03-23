@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gen AI Articles | Athisttaprabu Ramalingam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">AR</a>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#skills">Skills</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="article-container">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+        
+        <header class="article-header">
+            <h1>Generative AI in Data Engineering</h1>
+            <p>Exploring the intersection of LLMs and modern data pipelines.</p>
+        </header>
+
+        <section class="article-content">
+            <h2>1. Text Summarization with Google Gemini API</h2>
+            <p>In modern data engineering, summarizing large volumes of unstructured text is a common requirement. Using the Google Gemini API, we can build scalable pipelines to process documents and extract key insights efficiently.</p>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="language">Python</span>
+                    <button class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+                <pre><code><span class="keyword">import</span> google.generativeai <span class="keyword">as</span> genai
+<span class="keyword">import</span> os
+
+<span class="comment"># Configure the API key from environment variables</span>
+genai.configure(api_key=os.environ[<span class="string">"GEMINI_API_KEY"</span>])
+
+<span class="keyword">def</span> <span class="func">summarize_technical_docs</span>(text):
+    <span class="comment"># Initialize the Gemini Pro model</span>
+    model = genai.GenerativeModel(<span class="string">'gemini-pro'</span>)
+    
+    prompt = <span class="string">f"Summarize the following technical documentation concisely:\n\n{text}"</span>
+    
+    <span class="comment"># Generate content</span>
+    response = model.generate_content(prompt)
+    <span class="keyword">return</span> response.text
+
+<span class="comment"># Example usage for a data pipeline</span>
+raw_text = <span class="string">"Generative AI is transforming how we handle unstructured data..."</span>
+summary = summarize_technical_docs(raw_text)
+<span class="func">print</span>(summary)</code></pre>
+            </div>
+
+            <h2>2. Structured Data Extraction using Prompt Engineering</h2>
+            <p>One of the most powerful applications of Gen AI in Data Engineering is turning unstructured text into structured formats like JSON. This allows for seamless integration into downstream databases and analytics platforms.</p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="language">Python / JSON</span>
+                    <button class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                </div>
+                <pre><code><span class="keyword">import</span> json
+
+<span class="keyword">def</span> <span class="func">extract_entities</span>(text):
+    model = genai.GenerativeModel(<span class="string">'gemini-pro'</span>)
+    
+    <span class="comment"># Clearly define the expected structure in the prompt</span>
+    prompt = <span class="string">"""
+    Extract the following entities from the text in JSON format:
+    - Company Name
+    - Technology Stack (list)
+    - Industry Focus
+    
+    Text: {text}
+    """</span>
+    
+    response = model.generate_content(prompt.format(text=text))
+    
+    <span class="comment"># Parse the string response into a Python dictionary</span>
+    <span class="keyword">try</span>:
+        data = json.loads(response.text)
+        <span class="keyword">return</span> data
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        <span class="func">print</span>(<span class="string">"Error parsing JSON:"</span>, e)
+        <span class="keyword">return</span> <span class="keyword">None</span></code></pre>
+            </div>
+
+            <p>By leveraging these techniques, data engineers can automate complex data enrichment tasks that previously required significant manual effort or fragile regex-based systems.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Athisttaprabu Ramalingam. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

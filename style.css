@@ -762,26 +762,19 @@ code {
     line-height: 1.8;
 }
 
-.back-link {
-    display: inline-flex;
+.back-btn-header {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 40px;
-    color: var(--accent);
-    font-weight: 600;
-    padding: 12px 24px;
-    background: #ffffff;
-    border: 2px solid var(--accent);
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: var(--transition);
 }
 
-.back-link:hover {
-    gap: 12px;
-    background: var(--accent);
-    color: white;
-    transform: translateX(-5px);
+.back-btn-header:hover {
+    color: var(--text-primary);
+    transform: translateX(-3px);
 }
 
 /* Article Cards for Landing Page */

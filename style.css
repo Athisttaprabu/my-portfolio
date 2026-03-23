@@ -769,8 +769,60 @@ code {
     margin-bottom: 30px;
     color: var(--accent);
     font-weight: 600;
+    padding: 8px 16px;
+    background: rgba(212, 175, 55, 0.05);
+    border-radius: 20px;
 }
 
 .back-link:hover {
     gap: 12px;
-}
+    background: rgba(212, 175, 55, 0.1);
+}
+
+/* Article Cards for Landing Page */
+.article-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.article-card {
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    border-color: var(--accent);
+}
+
+.article-card h3 {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+}
+
+.article-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.article-card .read-more {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}

@@ -71,59 +71,62 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
 
-    // Copy to Clipboard logic with fallback for non-secure environments
+    // Robust Copy to Clipboard logic
     const copyToClipboard = (text, btn) => {
-        const copyAction = (str) => {
-            if (navigator.clipboard && window.isSecureContext) {
-                return navigator.clipboard.writeText(str);
-            } else {
-                // Fallback method for non-HTTPS or file:// protocol
-                return new Promise((resolve, reject) => {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = str;
-                    textArea.style.position = "fixed";
-                    textArea.style.left = "-9999px";
-                    textArea.style.top = "0";
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        const successful = document.execCommand('copy');
-                        textArea.remove();
-                        successful ? resolve() : reject();
-                    } catch (err) {
-                        textArea.remove();
-                        reject(err);
-                    }
-                });
+        const originalContent = btn.innerHTML;
+
+        const setStatus = (success) => {
+            btn.innerHTML = success ? '<i class="fas fa-check"></i> Copied!' : '<i class="fas fa-times"></i> Failed';
+            if (success) btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.classList.remove('copied');
+            }, 2000);
+        };
+
+        const fallbackCopy = (str) => {
+            const textArea = document.createElement("textarea");
+            textArea.value = str;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            textArea.style.top = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                const successful = document.execCommand('copy');
+                textArea.remove();
+                setStatus(successful);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+                textArea.remove();
+                setStatus(false);
             }
         };
 
-        copyAction(text).then(() => {
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-            btn.classList.add('copied');
-
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.remove('copied');
-            }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy text: ', err);
-            btn.innerHTML = '<i class="fas fa-times"></i> Error';
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-            }, 2000);
-        });
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text)
+                .then(() => setStatus(true))
+                .catch(err => {
+                    console.warn('Clipboard API failed, trying fallback:', err);
+                    fallbackCopy(text);
+                });
+        } else {
+            fallbackCopy(text);
+        }
     };
 
     // Global listener for copy buttons
     document.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('.copy-btn');
         if (copyBtn) {
+            e.preventDefault();
             const container = copyBtn.closest('.code-container');
             const codeElement = container.querySelector('code');
-            copyToClipboard(codeElement.innerText, copyBtn);
+            if (codeElement) {
+                // Use textContent for a cleaner text extraction from pre/code blocks
+                copyToClipboard(codeElement.textContent, copyBtn);
+            }
         }
     });
 });

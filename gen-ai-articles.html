@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen AI Articles | Athisttaprabu Ramalingam</title>
+    <title>Gen AI Learnings | Athisttaprabu Ramalingam</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -29,76 +29,23 @@
         <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
         
         <header class="article-header">
-            <h1>Generative AI in Data Engineering</h1>
-            <p>Exploring the intersection of LLMs and modern data pipelines.</p>
+            <h1>Welcome to Gen AI learnings...!</h1>
+            <p>Explore my journey and technical insights into Generative AI.</p>
         </header>
 
-        <section class="article-content">
-            <h2>1. Text Summarization with Google Gemini API</h2>
-            <p>In modern data engineering, summarizing large volumes of unstructured text is a common requirement. Using the Google Gemini API, we can build scalable pipelines to process documents and extract key insights efficiently.</p>
+        <section class="article-list">
+            <a href="google-gemini-api.html" class="article-card">
+                <h3>Page 1: Google Gemini API</h3>
+                <p>Learn how to use Google Gemini for text summarization and structured data extraction in data pipelines.</p>
+                <span class="read-more">Read Article <i class="fas fa-arrow-right"></i></span>
+            </a>
             
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="language">Python</span>
-                    <button class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
-                </div>
-                <pre><code><span class="keyword">import</span> google.generativeai <span class="keyword">as</span> genai
-<span class="keyword">import</span> os
-
-<span class="comment"># Configure the API key from environment variables</span>
-genai.configure(api_key=os.environ[<span class="string">"GEMINI_API_KEY"</span>])
-
-<span class="keyword">def</span> <span class="func">summarize_technical_docs</span>(text):
-    <span class="comment"># Initialize the Gemini Pro model</span>
-    model = genai.GenerativeModel(<span class="string">'gemini-pro'</span>)
-    
-    prompt = <span class="string">f"Summarize the following technical documentation concisely:\n\n{text}"</span>
-    
-    <span class="comment"># Generate content</span>
-    response = model.generate_content(prompt)
-    <span class="keyword">return</span> response.text
-
-<span class="comment"># Example usage for a data pipeline</span>
-raw_text = <span class="string">"Generative AI is transforming how we handle unstructured data..."</span>
-summary = summarize_technical_docs(raw_text)
-<span class="func">print</span>(summary)</code></pre>
+            <!-- Future articles can be added here -->
+            <div class="article-card" style="opacity: 0.7; cursor: default;">
+                <h3>Coming Soon: RAG Architectures</h3>
+                <p>An in-depth look at Retrieval-Augmented Generation for enterprise data sets.</p>
+                <span class="read-more" style="color: var(--text-secondary);">Coming Soon</span>
             </div>
-
-            <h2>2. Structured Data Extraction using Prompt Engineering</h2>
-            <p>One of the most powerful applications of Gen AI in Data Engineering is turning unstructured text into structured formats like JSON. This allows for seamless integration into downstream databases and analytics platforms.</p>
-
-            <div class="code-container">
-                <div class="code-header">
-                    <span class="language">Python / JSON</span>
-                    <button class="copy-btn"><i class="fas fa-copy"></i> Copy</button>
-                </div>
-                <pre><code><span class="keyword">import</span> json
-
-<span class="keyword">def</span> <span class="func">extract_entities</span>(text):
-    model = genai.GenerativeModel(<span class="string">'gemini-pro'</span>)
-    
-    <span class="comment"># Clearly define the expected structure in the prompt</span>
-    prompt = <span class="string">"""
-    Extract the following entities from the text in JSON format:
-    - Company Name
-    - Technology Stack (list)
-    - Industry Focus
-    
-    Text: {text}
-    """</span>
-    
-    response = model.generate_content(prompt.format(text=text))
-    
-    <span class="comment"># Parse the string response into a Python dictionary</span>
-    <span class="keyword">try</span>:
-        data = json.loads(response.text)
-        <span class="keyword">return</span> data
-    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
-        <span class="func">print</span>(<span class="string">"Error parsing JSON:"</span>, e)
-        <span class="keyword">return</span> <span class="keyword">None</span></code></pre>
-            </div>
-
-            <p>By leveraging these techniques, data engineers can automate complex data enrichment tasks that previously required significant manual effort or fragile regex-based systems.</p>
         </section>
     </main>
 
@@ -108,67 +55,7 @@ summary = summarize_technical_docs(raw_text)
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("Copy script initialized");
-            
-            const copyToClipboard = (text, btn) => {
-                const originalContent = btn.innerHTML;
-                
-                const setStatus = (success) => {
-                    btn.innerHTML = success ? '<i class="fas fa-check"></i> Copied!' : '<i class="fas fa-times"></i> Failed';
-                    if (success) btn.classList.add('copied');
-                    setTimeout(() => {
-                        btn.innerHTML = originalContent;
-                        btn.classList.remove('copied');
-                    }, 2000);
-                };
-
-                const fallbackCopy = (str) => {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = str;
-                    textArea.style.position = "fixed";
-                    textArea.style.left = "-9999px";
-                    textArea.style.top = "0";
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        const successful = document.execCommand('copy');
-                        textArea.remove();
-                        setStatus(successful);
-                    } catch (err) {
-                        console.error('Fallback copy failed:', err);
-                        textArea.remove();
-                        setStatus(false);
-                    }
-                };
-
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(text)
-                        .then(() => setStatus(true))
-                        .catch(err => {
-                            console.warn('Clipboard API failed, trying fallback:', err);
-                            fallbackCopy(text);
-                        });
-                } else {
-                    fallbackCopy(text);
-                }
-            };
-
-            document.addEventListener('click', (e) => {
-                const copyBtn = e.target.closest('.copy-btn');
-                if (copyBtn) {
-                    e.preventDefault();
-                    const container = copyBtn.closest('.code-container');
-                    const codeElement = container.querySelector('code');
-                    if (codeElement) {
-                        copyToClipboard(codeElement.textContent, copyBtn);
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

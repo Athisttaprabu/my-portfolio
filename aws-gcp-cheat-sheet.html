@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS ↔ GCP Service Equivalency | Athisttaprabu Ramalingam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --aws: #FF9900;
+            --aws-dark: #c47600;
+            --gcp: #4285F4;
+            --gcp-dark: #2b6fe0;
+            --bg-sheet: #0a0e1a;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --border-sheet: #1e2d45;
+            --text-sheet: #e2e8f0;
+            --muted-sheet: #64748b;
+            --accent-sheet: #00ffc8;
+            --red-sheet: #f87171;
+            --yellow-sheet: #fbbf24;
+            --purple-sheet: #a78bfa;
+            --green-sheet: #34d399;
+        }
+
+        .cheat-sheet-body {
+            background: var(--bg-sheet);
+            color: var(--text-sheet);
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 100vh;
+            margin-top: 80px; /* Space for fixed header */
+        }
+
+        /* Noise overlay */
+        .cheat-sheet-body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.4;
+        }
+
+        header.sheet-header {
+            padding: 40px 32px 28px;
+            border-bottom: 1px solid var(--border-sheet);
+            position: relative;
+            background: linear-gradient(135deg, rgba(255,153,0,0.06) 0%, transparent 50%, rgba(66,133,244,0.06) 100%);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 3px;
+            background: rgba(0,255,200,0.1);
+            color: var(--accent-sheet);
+            border: 1px solid rgba(0,255,200,0.25);
+        }
+
+        .sheet-header h1 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(20px, 3vw, 30px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin: 0;
+        }
+
+        .sheet-header h1 .aws-text { color: var(--aws); }
+        .sheet-header h1 .gcp-text { color: var(--gcp); }
+        .sheet-header h1 .arrow { color: var(--muted-sheet); margin: 0 6px; }
+
+        .subtitle-sheet {
+            color: var(--muted-sheet);
+            font-size: 12px;
+            margin-top: 6px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* Column headers */
+        .col-headers {
+            display: grid;
+            grid-template-columns: 180px 1fr 1fr 1fr;
+            gap: 1px;
+            background: var(--border-sheet);
+            border-bottom: 2px solid var(--border-sheet);
+            position: sticky;
+            top: 70px; /* Below portfolio header */
+            z-index: 10;
+        }
+
+        .col-header {
+            padding: 12px 16px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .col-header.category { background: var(--surface); color: var(--muted-sheet); }
+        .col-header.aws-col { background: rgba(255,153,0,0.12); color: var(--aws); }
+        .col-header.gcp-col { background: rgba(66,133,244,0.12); color: var(--gcp); }
+        .col-header.notes-col { background: var(--surface); color: var(--muted-sheet); }
+
+        /* Sections */
+        .sheet-section {
+            border-bottom: 1px solid var(--border-sheet);
+        }
+
+        .section-title-sheet {
+            display: grid;
+            grid-template-columns: 180px 1fr 1fr 1fr;
+            gap: 1px;
+            background: var(--border-sheet);
+        }
+
+        .section-label-sheet {
+            padding: 8px 16px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-label-sheet .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .section-filler {
+            grid-column: span 3;
+        }
+
+        /* Rows */
+        .sheet-row {
+            display: grid;
+            grid-template-columns: 180px 1fr 1fr 1fr;
+            gap: 1px;
+            background: var(--border-sheet);
+            transition: background 0.15s;
+        }
+
+        .sheet-row:hover { background: rgba(255,255,255,0.04); }
+
+        .sheet-cell {
+            padding: 10px 16px;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sheet-cell.cat-cell {
+            background: var(--surface);
+            justify-content: center;
+        }
+
+        .sheet-cell.aws-cell { background: rgba(255,153,0,0.04); }
+        .sheet-cell.gcp-cell { background: rgba(66,133,244,0.04); }
+        .sheet-cell.notes-cell { background: var(--surface2); }
+
+        .service-name {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .aws-cell .service-name { color: var(--aws); }
+        .gcp-cell .service-name { color: var(--gcp); }
+
+        .service-desc {
+            color: var(--muted-sheet);
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .cat-name {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-sheet);
+        }
+
+        .cat-sub {
+            font-size: 10px;
+            color: var(--muted-sheet);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .note-text {
+            font-size: 11px;
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        .sheet-tag {
+            display: inline-block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            padding: 1px 6px;
+            border-radius: 2px;
+            margin-top: 3px;
+            width: fit-content;
+        }
+
+        .tag-managed { background: rgba(52,211,153,0.12); color: var(--green-sheet); border: 1px solid rgba(52,211,153,0.25); }
+        .tag-serverless { background: rgba(167,139,250,0.12); color: var(--purple-sheet); border: 1px solid rgba(167,139,250,0.25); }
+        .tag-realtime { background: rgba(248,113,113,0.12); color: var(--red-sheet); border: 1px solid rgba(248,113,113,0.25); }
+        .tag-key { background: rgba(251,191,36,0.12); color: var(--yellow-sheet); border: 1px solid rgba(251,191,36,0.25); }
+
+        /* Section color themes */
+        .sec-storage .section-label-sheet { background: rgba(52,211,153,0.07); color: var(--green-sheet); }
+        .sec-storage .dot { background: var(--green-sheet); }
+
+        .sec-processing .section-label-sheet { background: rgba(251,191,36,0.07); color: var(--yellow-sheet); }
+        .sec-processing .dot { background: var(--yellow-sheet); }
+
+        .sec-streaming .section-label-sheet { background: rgba(248,113,113,0.07); color: var(--red-sheet); }
+        .sec-streaming .dot { background: var(--red-sheet); }
+
+        .sec-warehouse .section-label-sheet { background: rgba(66,133,244,0.1); color: #60a5fa; }
+        .sec-warehouse .dot { background: #60a5fa; }
+
+        .sec-orchestration .section-label-sheet { background: rgba(167,139,250,0.07); color: var(--purple-sheet); }
+        .sec-orchestration .dot { background: var(--purple-sheet); }
+
+        .sec-catalog .section-label-sheet { background: rgba(0,255,200,0.07); color: var(--accent-sheet); }
+        .sec-catalog .dot { background: var(--accent-sheet); }
+
+        .sec-ml .section-label-sheet { background: rgba(255,153,0,0.07); color: var(--aws); }
+        .sec-ml .dot { background: var(--aws); }
+
+        .sec-infra .section-label-sheet { background: rgba(148,163,184,0.07); color: #94a3b8; }
+        .sec-infra .dot { background: #94a3b8; }
+
+        @media (max-width: 768px) {
+            .col-headers, .section-title-sheet, .sheet-row {
+                grid-template-columns: 130px 1fr 1fr;
+            }
+            .col-header.notes-col,
+            .section-filler,
+            .sheet-cell.notes-cell { display: none; }
+        }
+
+        @media (max-width: 540px) {
+            .col-headers, .section-title-sheet, .sheet-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .col-header.category, .sheet-cell.cat-cell { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container" style="display: flex; align-items: center; justify-content: flex-start; gap: 40px;">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <a href="index.html" class="back-btn-header" title="Back to Previous Page"><i class="fas fa-arrow-left"></i></a>
+                <a href="index.html" class="logo">AR</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#skills">Skills</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="#" id="tech-articles-btn">Tech Articles</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="cheat-sheet-body">
+        <header class="sheet-header">
+            <div class="header-top">
+                <div class="badge">Interview Prep</div>
+                <div class="badge" style="background:rgba(255,153,0,0.1);color:var(--aws);border-color:rgba(255,153,0,0.3);">Principal / Architect Level</div>
+            </div>
+            <h1><span class="aws-text">AWS</span><span class="arrow">⇄</span><span class="gcp-text">GCP</span> Data Engineering</h1>
+            <p class="subtitle-sheet">// Service Equivalency Cheat Sheet · Data Engineer Perspective</p>
+        </header>
+
+        <!-- Column Headers -->
+        <div class="col-headers">
+            <div class="col-header category">Category</div>
+            <div class="col-header aws-col">▶ AWS Service</div>
+            <div class="col-header gcp-col">▶ GCP Equivalent</div>
+            <div class="col-header notes-col">Key Differences / Interview Notes</div>
+        </div>
+
+        <!-- Section content copied from source -->
+        <main>
+            <!-- ─── OBJECT STORAGE ─── -->
+            <div class="sheet-section sec-storage">
+                <div class="section-title-sheet">
+                    <div class="section-label-sheet"><span class="dot"></span>Object & File Storage</div>
+                    <div class="section-filler" style="background:var(--surface2);grid-column:span 3"></div>
+                </div>
+
+                <div class="sheet-row">
+                    <div class="sheet-cell cat-cell"><div class="cat-name">Object Storage</div><div class="cat-sub">Data lake foundation</div></div>
+                    <div class="sheet-cell aws-cell"><div class="service-name">S3</div><div class="service-desc">Simple Storage Service. Buckets, prefixes, versioning, lifecycle policies</div><div class="sheet-tag tag-key">★ Cornerstone</div></div>
+                    <div class="sheet-cell gcp-cell"><div class="service-name">Cloud Storage (GCS)</div><div class="service-desc">Buckets, object versioning, storage classes</div><div class="sheet-tag tag-key">★ Cornerstone</div></div>
+                    <div class="sheet-cell notes-cell"><div class="note-text">Both support multipart upload, ACLs, signed URLs. GCS has <strong>strong consistency</strong> by default.</div></div>
+                </div>
+
+                <div class="sheet-row">
+                    <div class="sheet-cell cat-cell"><div class="cat-name">Data Lake Format</div></div>
+                    <div class="sheet-cell aws-cell"><div class="service-name">S3 + Lake Formation</div><div class="service-desc">Governed tables, row/col security</div></div>
+                    <div class="sheet-cell gcp-cell"><div class="service-name">GCS + Dataplex</div><div class="service-desc">Unified data management, auto discovery</div></div>
+                    <div class="sheet-cell notes-cell"><div class="note-text">Dataplex adds governance layer on top of GCS/BQ.</div></div>
+                </div>
+            </div>
+
+            <!-- ─── BATCH PROCESSING ─── -->
+            <div class="sheet-section sec-processing">
+                <div class="section-title-sheet">
+                    <div class="section-label-sheet"><span class="dot"></span>Batch Processing</div>
+                    <div class="section-filler" style="background:var(--surface2);grid-column:span 3"></div>
+                </div>
+
+                <div class="sheet-row">
+                    <div class="sheet-cell cat-cell"><div class="cat-name">Managed Spark/Hadoop</div><div class="cat-sub">ETL backbone</div></div>
+                    <div class="sheet-cell aws-cell"><div class="service-name">EMR</div><div class="service-desc">Elastic MapReduce. Managed Spark, Hive clusters.</div><div class="sheet-tag tag-managed">MANAGED</div></div>
+                    <div class="sheet-cell gcp-cell"><div class="service-name">Dataproc</div><div class="service-desc">Managed Spark/Hadoop. Fast spin-up (~90s).</div><div class="sheet-tag tag-managed">MANAGED</div></div>
+                    <div class="sheet-cell notes-cell"><div class="note-text">Dataproc clusters start faster. Both support autoscaling.</div></div>
+                </div>
+
+                <div class="sheet-row">
+                    <div class="sheet-cell cat-cell"><div class="cat-name">Serverless ETL</div></div>
+                    <div class="sheet-cell aws-cell"><div class="service-name">AWS Glue</div><div class="service-desc">Serverless Spark ETL. Job bookmarks, catalog.</div><div class="sheet-tag tag-serverless">SERVERLESS</div></div>
+                    <div class="sheet-cell gcp-cell"><div class="service-name">Dataflow</div><div class="service-desc">Managed Apache Beam. Batch + streaming unified.</div><div class="sheet-tag tag-serverless">SERVERLESS</div></div>
+                    <div class="sheet-cell notes-cell"><div class="note-text">Glue = Spark-based; Dataflow = Beam-based.</div></div>
+                </div>
+            </div>
+
+            <!-- ─── DATA WAREHOUSE ─── -->
+            <div class="sheet-section sec-warehouse">
+                <div class="section-title-sheet">
+                    <div class="section-label-sheet"><span class="dot"></span>Data Warehouse</div>
+                    <div class="section-filler" style="background:var(--surface2);grid-column:span 3"></div>
+                </div>
+
+                <div class="sheet-row">
+                    <div class="sheet-cell cat-cell"><div class="cat-name">Cloud Data Warehouse</div><div class="cat-sub">Core analytics store</div></div>
+                    <div class="sheet-cell aws-cell"><div class="service-name">Redshift</div><div class="service-desc">MPP columnar DW. RA3 nodes. Redshift Serverless.</div><div class="sheet-tag tag-key">★ Cornerstone</div></div>
+                    <div class="sheet-cell gcp-cell"><div class="service-name">BigQuery</div><div class="service-desc">Serverless, fully managed DW. Dremel engine. BQML built-in.</div><div class="sheet-tag tag-key">★ Cornerstone</div></div>
+                    <div class="sheet-cell notes-cell"><div class="note-text">BigQuery is serverless by design. Redshift requires cluster decisions.</div></div>
+                </div>
+            </div>
+
+            <!-- ─── ORCHESTRATION ─── -->
+            <div class="sheet-section sec-orchestration">
+                <div class="section-title-sheet">
+                    <div class="section-label-sheet"><span class="dot"></span>Orchestration</div>
+                    <div class="section-filler" style="background:var(--surface2);grid-column:span 3"></div>
+                </div>
+
+                <div class="sheet-row">
+                    <div class="sheet-cell cat-cell"><div class="cat-name">Managed Airflow</div><div class="cat-sub">Pipeline scheduling</div></div>
+                    <div class="sheet-cell aws-cell"><div class="service-name">MWAA</div><div class="service-desc">Managed Workflows for Apache Airflow.</div></div>
+                    <div class="sheet-cell gcp-cell"><div class="service-name">Cloud Composer</div><div class="service-desc">Managed Airflow on GKE.</div></div>
+                    <div class="sheet-cell notes-cell"><div class="note-text">Both are managed Airflow — same DAG code.</div></div>
+                </div>
+            </div>
+        </main>
+
+        <footer style="background: var(--surface); padding: 24px 32px; border-top: 1px solid var(--border-sheet); display: flex; gap: 32px; flex-wrap: wrap;">
+            <div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted-sheet); font-family: 'IBM Plex Mono', monospace;">
+                <span class="sheet-tag tag-key">★ Cornerstone</span> Core service
+            </div>
+            <div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted-sheet); font-family: 'IBM Plex Mono', monospace;">
+                <span class="sheet-tag tag-managed">MANAGED</span> Cluster-based
+            </div>
+            <div class="legend-item" style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted-sheet); font-family: 'IBM Plex Mono', monospace;">
+                <span class="sheet-tag tag-serverless">SERVERLESS</span> No-infra
+            </div>
+            <div style="margin-left:auto; font-size:10px; color:#334155;">Principal DE / Architect Interview Prep · 2025</div>
+        </footer>
+    </div>
+
+    <!-- Tech Articles Modal -->
+    <div id="tech-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Tech Articles Categories</h3>
+            <div class="tech-list">
+                <a href="coming-soon.html" class="tech-tag">Teradata</a>
+                <a href="aws-gcp-cheat-sheet.html" class="tech-tag">AWS</a>
+                <a href="aws-gcp-cheat-sheet.html" class="tech-tag">GCP</a>
+                <a href="coming-soon.html" class="tech-tag">Python</a>
+                <a href="coming-soon.html" class="tech-tag">Pyspark</a>
+                <a href="gen-ai-articles.html" class="tech-tag">Gen AI</a>
+                <a href="google-gemini-api.html" class="tech-tag">Google Gemini API</a>
+                <a href="coming-soon.html" class="tech-tag">SQL</a>
+                <a href="aws-gcp-cheat-sheet.html" class="tech-tag">AWS ↔ GCP Cheat Sheet</a>
+                <a href="coming-soon.html" class="tech-tag">Cloud Migration</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

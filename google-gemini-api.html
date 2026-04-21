@@ -125,55 +125,7 @@ summary = summarize_technical_docs(raw_text)
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const copyToClipboard = (text, btn) => {
-                const originalContent = btn.innerHTML;
-                const setStatus = (success) => {
-                    btn.innerHTML = success ? '<i class="fas fa-check"></i> Copied!' : '<i class="fas fa-times"></i> Failed';
-                    if (success) btn.classList.add('copied');
-                    setTimeout(() => {
-                        btn.innerHTML = originalContent;
-                        btn.classList.remove('copied');
-                    }, 2000);
-                };
-                const fallbackCopy = (str) => {
-                    const textArea = document.createElement("textarea");
-                    textArea.value = str;
-                    textArea.style.position = "fixed";
-                    textArea.style.left = "-9999px";
-                    textArea.style.top = "0";
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        const successful = document.execCommand('copy');
-                        textArea.remove();
-                        setStatus(successful);
-                    } catch (err) {
-                        textArea.remove();
-                        setStatus(false);
-                    }
-                };
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(text).then(() => setStatus(true)).catch(() => fallbackCopy(text));
-                } else {
-                    fallbackCopy(text);
-                }
-            };
-            document.addEventListener('click', (e) => {
-                const copyBtn = e.target.closest('.copy-btn');
-                if (copyBtn) {
-                    e.preventDefault();
-                    const container = copyBtn.closest('.code-container');
-                    const codeElement = container.querySelector('code');
-                    if (codeElement) {
-                        copyToClipboard(codeElement.textContent, copyBtn);
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

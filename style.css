@@ -487,7 +487,8 @@ footer {
     }
 
     .nav-links.active {
-        right: 0;
+        right: 0 !important;
+        display: flex !important;
     }
 
     .nav-links li {

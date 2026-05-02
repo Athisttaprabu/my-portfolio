@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCP Dataproc — Lead & Principal Data Engineer Interview Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0d1225;
+    --bg3: #111828;
+    --surface: #151d30;
+    --surface2: #1c2540;
+    --border: #1e2d4a;
+    --border2: #243358;
+    --accent: #00c8ff;
+    --accent2: #7b5cff;
+    --accent3: #00ffb3;
+    --accent4: #ff6b35;
+    --warn: #ffcc00;
+    --text: #e8edf8;
+    --text2: #9aaac8;
+    --text3: #5a6b8a;
+    --google-blue: #4285f4;
+    --google-red: #ea4335;
+    --google-yellow: #fbbc05;
+    --google-green: #34a853;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.72rem;
+    color: var(--text2);
+    text-decoration: none;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent);
+    background: rgba(0,200,255,0.08);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 2rem 4rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 4rem 0 3rem;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,200,255,0.07);
+    border: 1px solid rgba(0,200,255,0.2);
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    animation: fadeSlideUp 0.6s ease both;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; transform: scale(1); }
+    50% { opacity:0.4; transform: scale(0.7); }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    animation: fadeSlideUp 0.7s 0.1s ease both;
+  }
+
+  h1 span.hl {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    margin-top: 1.2rem;
+    font-size: 1.05rem;
+    color: var(--text2);
+    max-width: 640px;
+    animation: fadeSlideUp 0.7s 0.2s ease both;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    animation: fadeSlideUp 0.7s 0.3s ease both;
+  }
+
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .hero-meta-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-meta-value {
+    font-size: 0.9rem;
+    color: var(--accent3);
+    font-weight: 600;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section {
+    margin-top: 4rem;
+    animation: fadeSlideUp 0.6s ease both;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ── WHAT IS DATAPROC ── */
+  .definition-box {
+    background: linear-gradient(135deg, rgba(0,200,255,0.05) 0%, rgba(123,92,255,0.05) 100%);
+    border: 1px solid rgba(0,200,255,0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .definition-box::before {
+    content: '{ }';
+    position: absolute;
+    right: 1.5rem; top: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 5rem;
+    color: rgba(0,200,255,0.04);
+    font-weight: 700;
+  }
+
+  .definition-box p {
+    font-size: 1.05rem;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  .definition-box strong {
+    color: var(--accent);
+  }
+
+  /* ── NEW NAME ALERT ── */
+  .alert-banner {
+    background: rgba(251,188,5,0.08);
+    border: 1px solid rgba(251,188,5,0.3);
+    border-radius: 10px;
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.88rem;
+    color: var(--warn);
+  }
+
+  .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+  /* ── FEATURE PILLS ── */
+  .pill-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid;
+    transition: all 0.2s;
+  }
+
+  .pill-blue { color: var(--accent); border-color: rgba(0,200,255,0.25); background: rgba(0,200,255,0.06); }
+  .pill-purple { color: var(--accent2); border-color: rgba(123,92,255,0.25); background: rgba(123,92,255,0.06); }
+  .pill-green { color: var(--accent3); border-color: rgba(0,255,179,0.25); background: rgba(0,255,179,0.06); }
+  .pill-orange { color: var(--accent4); border-color: rgba(255,107,53,0.25); background: rgba(255,107,53,0.06); }
+
+  /* ── ARCHITECTURE DIAGRAM ── */
+  .arch-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    overflow-x: auto;
+  }
+
+  .arch-diagram svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+
+  .compare-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(30,45,74,0.5);
+    color: var(--text2);
+    vertical-align: top;
+  }
+
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .compare-table td:first-child {
+    font-weight: 600;
+    color: var(--text);
+    width: 18%;
+  }
+
+  .badge-yes {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--accent3);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  /* ── INTERVIEW QUESTIONS ── */
+  .q-section {
+    margin-bottom: 2rem;
+  }
+
+  .q-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 1.2rem;
+  }
+
+  .cat-conceptual { background: rgba(0,200,255,0.1); color: var(--accent); border: 1px solid rgba(0,200,255,0.2); }
+  .cat-technical { background: rgba(123,92,255,0.1); color: var(--accent2); border: 1px solid rgba(123,92,255,0.2); }
+  .cat-architecture { background: rgba(0,255,179,0.1); color: var(--accent3); border: 1px solid rgba(0,255,179,0.2); }
+  .cat-advanced { background: rgba(255,107,53,0.1); color: var(--accent4); border: 1px solid rgba(255,107,53,0.2); }
+
+  .q-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .q-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .q-item:hover { border-color: var(--border2); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.1rem 1.3rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .q-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text3);
+    min-width: 28px;
+    margin-top: 0.15rem;
+  }
+
+  .q-text {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .q-chevron {
+    color: var(--text3);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+  }
+
+  .q-item.open .q-chevron { transform: rotate(180deg); color: var(--accent); }
+  .q-item.open { border-color: rgba(0,200,255,0.2); }
+
+  .q-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+
+  .q-item.open .q-answer {
+    max-height: 800px;
+  }
+
+  .q-answer-inner {
+    padding: 0 1.3rem 1.3rem 3.3rem;
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.8;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    margin-top: 0;
+  }
+
+  .q-answer-inner strong { color: var(--accent); }
+  .q-answer-inner code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    background: rgba(0,200,255,0.07);
+    border: 1px solid rgba(0,200,255,0.15);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  .q-answer-inner ul {
+    margin: 0.6rem 0 0.6rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .q-tip {
+    margin-top: 0.8rem;
+    background: rgba(0,255,179,0.05);
+    border-left: 3px solid var(--accent3);
+    padding: 0.7rem 1rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.83rem;
+    color: var(--accent3);
+  }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: #080c18;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    overflow-x: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: #b0c4de;
+    margin: 0.8rem 0;
+  }
+
+  .kw { color: #7b5cff; }
+  .str { color: #00ffb3; }
+  .cm { color: #4a5a78; font-style: italic; }
+  .fn { color: #00c8ff; }
+  .num { color: #ff6b35; }
+
+  /* ── DEPLOYMENT MODES ── */
+  .mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.2rem;
+  }
+
+  .mode-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.6rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .mode-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border2);
+  }
+
+  .mode-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .mode-cluster::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .mode-serverless::before { background: linear-gradient(90deg, var(--accent2), var(--accent3)); }
+  .mode-gke::before { background: linear-gradient(90deg, var(--accent3), var(--accent4)); }
+
+  .mode-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .mode-cluster .mode-icon { background: rgba(0,200,255,0.1); }
+  .mode-serverless .mode-icon { background: rgba(123,92,255,0.1); }
+  .mode-gke .mode-icon { background: rgba(0,255,179,0.1); }
+
+  .mode-card h3 { margin-bottom: 0.5rem; }
+
+  .mode-card p {
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin-bottom: 1rem;
+  }
+
+  .mode-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .mode-list li {
+    font-size: 0.82rem;
+    color: var(--text2);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .mode-list li::before {
+    content: '→';
+    color: var(--text3);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    margin-top: 0.15rem;
+  }
+
+  /* ── FEATURE CARDS ── */
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+    transition: all 0.2s;
+  }
+
+  .feature-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .feature-card h3 {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .feature-card p {
+    font-size: 0.82rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* ── WHEN TO USE ── */
+  .use-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .use-yes, .use-no {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.4rem;
+  }
+
+  .use-yes { border: 1px solid rgba(0,255,179,0.2); }
+  .use-no { border: 1px solid rgba(255,107,53,0.2); }
+
+  .use-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .use-yes .use-heading { color: var(--accent3); }
+  .use-no .use-heading { color: var(--accent4); }
+
+  .use-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .use-list li {
+    font-size: 0.83rem;
+    color: var(--text2);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .use-yes .use-list li::before { content: '✓'; color: var(--accent3); font-weight: 700; flex-shrink: 0; }
+  .use-no .use-list li::before { content: '✗'; color: var(--accent4); font-weight: 700; flex-shrink: 0; }
+
+  /* ── COST MODEL ── */
+  .cost-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .cost-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+    text-align: center;
+  }
+
+  .cost-amount {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0.5rem 0;
+  }
+
+  .cost-label {
+    font-size: 0.78rem;
+    color: var(--text2);
+  }
+
+  .cost-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 2rem 0;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.1s;
+    z-index: 99;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 5rem;
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--text3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  footer span { color: var(--accent); }
+
+  /* responsive */
+  @media (max-width: 768px) {
+    .use-grid { grid-template-columns: 1fr; }
+    .cost-grid { grid-template-columns: 1fr; }
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    main { padding: 70px 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<nav>
+  <div class="nav-brand">⚡ Dataproc Interview Prep</div>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#deployment">Deployment</a></li>
+    <li><a href="#compare">Compare</a></li>
+    <li><a href="#questions">Questions</a></li>
+    <li><a href="#best-practices">Best Practices</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">GCP Certification Prep 2026</div>
+    <h1>Google Cloud <span class="hl">Dataproc</span><br>Interview Mastery</h1>
+    <p class="hero-sub">Comprehensive preparation for Lead & Principal Data Engineer interviews. Sourced from official Google Cloud documentation, updated April 2026.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Official Name</span>
+        <span class="hero-meta-value">Managed Service for Apache Spark</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Last Doc Update</span>
+        <span class="hero-meta-value">April 29, 2026</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Interview Level</span>
+        <span class="hero-meta-value">Lead & Principal</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Cost Savings vs Alternatives</span>
+        <span class="hero-meta-value">18–60%</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OVERVIEW -->
+  <section class="section" id="overview">
+    <div class="section-label">01 — What is Dataproc</div>
+    <h2>Overview & Definition</h2>
+
+    <div class="alert-banner">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Official Rename (2026):</strong> Google has renamed Dataproc to <strong>"Managed Service for Apache Spark"</strong>. "Dataproc on Compute Engine" is now the cluster deployment mode, and "Google Cloud Serverless for Apache Spark" is the serverless deployment mode. Both fall under the same umbrella product. Know both names for your interview.</div>
+    </div>
+
+    <div class="definition-box">
+      <p>
+        <strong>Dataproc</strong> is Google Cloud's <strong>fully managed service</strong> for running <strong>Apache Spark, Hadoop, Hive, Pig, Flink, Trino, Presto</strong>, and 30+ open-source tools at scale. It provisions clusters in <strong>under 90 seconds</strong>, supports autoscaling, integrates natively with GCS, BigQuery, Bigtable, and Cloud Monitoring — and lets you delete clusters after jobs complete, so <strong>you only pay for what you use</strong>.
+      </p>
+      <br>
+      <p>
+        Pricing starts at <strong>$0.01 per vCPU per hour</strong> on top of Compute Engine costs, making it <strong>18–60% cheaper</strong> than comparable cloud-based Hadoop/Spark alternatives. The new <strong>Lightning Engine</strong> delivers <strong>4.3×+ faster Spark performance</strong> with zero code changes.
+      </p>
+    </div>
+
+    <div class="pill-grid">
+      <span class="pill pill-blue">⚡ Apache Spark</span>
+      <span class="pill pill-blue">🐘 Apache Hadoop</span>
+      <span class="pill pill-blue">🐝 Apache Hive</span>
+      <span class="pill pill-blue">🌊 Apache Flink</span>
+      <span class="pill pill-purple">📦 Presto / Trino</span>
+      <span class="pill pill-purple">🔁 PySpark / Spark SQL</span>
+      <span class="pill pill-green">💡 Lightning Engine</span>
+      <span class="pill pill-green">🤖 Gemini AI Integration</span>
+      <span class="pill pill-green">🧊 Apache Iceberg</span>
+      <span class="pill pill-orange">⚙️ Serverless Mode</span>
+      <span class="pill pill-orange">☸️ GKE Mode</span>
+      <span class="pill pill-orange">🔗 Vertex AI Integration</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ARCHITECTURE -->
+  <section class="section" id="architecture">
+    <div class="section-label">02 — Architecture</div>
+    <h2>Cluster Architecture Diagram</h2>
+
+    <div class="arch-diagram">
+      <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Sans, sans-serif">
+        <defs>
+          <linearGradient id="gBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00c8ff" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#7b5cff" stop-opacity="0.9"/>
+          </linearGradient>
+          <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00ffb3" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#00c8ff" stop-opacity="0.9"/>
+          </linearGradient>
+          <linearGradient id="gOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff6b35" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#ffcc00" stop-opacity="0.9"/>
+          </linearGradient>
+          <linearGradient id="gPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7b5cff" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#00c8ff" stop-opacity="0.9"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 Z" fill="#1e2d4a"/>
+          </marker>
+          <marker id="arrBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 Z" fill="#00c8ff"/>
+          </marker>
+          <marker id="arrGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 Z" fill="#00ffb3"/>
+          </marker>
+        </defs>
+
+        <!-- BG panels -->
+        <!-- ON-PREM box -->
+        <rect x="10" y="20" width="160" height="520" rx="12" fill="#0d1225" stroke="#1e2d4a" stroke-width="1"/>
+        <text x="90" y="48" text-anchor="middle" fill="#5a6b8a" font-size="10" font-family="Space Mono, monospace" letter-spacing="2">ON-PREMISES</text>
+
+        <!-- GCP box -->
+        <rect x="200" y="20" width="685" height="520" rx="12" fill="#0d1225" stroke="#1e2d4a" stroke-width="1"/>
+        <text x="542" y="48" text-anchor="middle" fill="#5a6b8a" font-size="10" font-family="Space Mono, monospace" letter-spacing="2">GOOGLE CLOUD PLATFORM</text>
+
+        <!-- On-prem sources -->
+        <rect x="25" y="70" width="130" height="52" rx="8" fill="#151d30" stroke="#ff6b35" stroke-width="1.5"/>
+        <text x="90" y="91" text-anchor="middle" fill="#ff6b35" font-size="10" font-weight="600">Teradata / Hadoop</text>
+        <text x="90" y="108" text-anchor="middle" fill="#9aaac8" font-size="9">On-Prem Databases</text>
+
+        <rect x="25" y="145" width="130" height="52" rx="8" fill="#151d30" stroke="#ff6b35" stroke-width="1.5"/>
+        <text x="90" y="166" text-anchor="middle" fill="#ff6b35" font-size="10" font-weight="600">HDFS / NFS</text>
+        <text x="90" y="183" text-anchor="middle" fill="#9aaac8" font-size="9">File Systems</text>
+
+        <rect x="25" y="220" width="130" height="52" rx="8" fill="#151d30" stroke="#ff6b35" stroke-width="1.5"/>
+        <text x="90" y="241" text-anchor="middle" fill="#ff6b35" font-size="10" font-weight="600">Oracle / SAP</text>
+        <text x="90" y="258" text-anchor="middle" fill="#9aaac8" font-size="9">Enterprise DBs</text>
+
+        <!-- VPN/Interconnect -->
+        <rect x="25" y="410" width="130" height="44" rx="8" fill="#151d30" stroke="#ffcc00" stroke-width="1"/>
+        <text x="90" y="430" text-anchor="middle" fill="#ffcc00" font-size="9" font-weight="600">VPN /</text>
+        <text x="90" y="445" text-anchor="middle" fill="#ffcc00" font-size="9" font-weight="600">Cloud Interconnect</text>
+
+        <!-- Arrows on-prem → VPN -->
+        <line x1="90" y1="272" x2="90" y2="408" stroke="#1e2d4a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+        <!-- VPN → GCS -->
+        <line x1="155" y1="432" x2="213" y2="432" stroke="#ffcc00" stroke-width="1.5" marker-end="url(#arrBlue)"/>
+
+        <!-- GCS Landing -->
+        <rect x="215" y="400" width="145" height="64" rx="10" fill="#151d30" stroke="#00c8ff" stroke-width="1.5"/>
+        <text x="288" y="424" text-anchor="middle" fill="#00c8ff" font-size="11" font-weight="700">☁ GCS</text>
+        <text x="288" y="440" text-anchor="middle" fill="#9aaac8" font-size="9">Raw Landing Zone</text>
+        <text x="288" y="455" text-anchor="middle" fill="#5a6b8a" font-size="8">gs://bucket/raw/...</text>
+
+        <!-- Dataproc Cluster box -->
+        <rect x="215" y="60" width="380" height="300" rx="14" fill="#111828" stroke="#243358" stroke-width="1.5"/>
+        <text x="405" y="88" text-anchor="middle" fill="#9aaac8" font-size="10" font-family="Space Mono, monospace" letter-spacing="1">DATAPROC CLUSTER</text>
+
+        <!-- Master node -->
+        <rect x="238" y="100" width="140" height="110" rx="10" fill="#1c2540" stroke="url(#gBlue)" stroke-width="1.5" filter="url(#glow)"/>
+        <text x="308" y="122" text-anchor="middle" fill="#00c8ff" font-size="10" font-weight="700">MASTER NODE</text>
+        <text x="308" y="140" text-anchor="middle" fill="#9aaac8" font-size="8.5">YARN ResourceManager</text>
+        <text x="308" y="155" text-anchor="middle" fill="#9aaac8" font-size="8.5">HDFS NameNode</text>
+        <text x="308" y="170" text-anchor="middle" fill="#9aaac8" font-size="8.5">Spark Driver</text>
+        <text x="308" y="185" text-anchor="middle" fill="#9aaac8" font-size="8.5">Job History Server</text>
+        <text x="308" y="200" text-anchor="middle" fill="#5a6b8a" font-size="7.5">HA: 3 Masters</text>
+
+        <!-- Worker nodes -->
+        <rect x="398" y="100" width="178" height="110" rx="10" fill="#1c2540" stroke="url(#gGreen)" stroke-width="1.5"/>
+        <text x="487" y="122" text-anchor="middle" fill="#00ffb3" font-size="10" font-weight="700">WORKER NODES</text>
+        <text x="487" y="140" text-anchor="middle" fill="#9aaac8" font-size="8.5">YARN NodeManager</text>
+        <text x="487" y="155" text-anchor="middle" fill="#9aaac8" font-size="8.5">HDFS DataNode</text>
+        <text x="487" y="170" text-anchor="middle" fill="#9aaac8" font-size="8.5">Spark Executors</text>
+        <text x="487" y="185" text-anchor="middle" fill="#9aaac8" font-size="8.5">Task Processing</text>
+        <text x="487" y="200" text-anchor="middle" fill="#5a6b8a" font-size="7.5">Autoscaling: 2–100 nodes</text>
+
+        <!-- Preemptible workers -->
+        <rect x="238" y="228" width="338" height="75" rx="10" fill="#1c2540" stroke="url(#gOrange)" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="407" y="250" text-anchor="middle" fill="#ff6b35" font-size="10" font-weight="700">SECONDARY (PREEMPTIBLE) WORKERS</text>
+        <text x="407" y="268" text-anchor="middle" fill="#9aaac8" font-size="8.5">Spot VMs — Up to 80% cost savings</text>
+        <text x="407" y="284" text-anchor="middle" fill="#9aaac8" font-size="8.5">Fault-tolerant workloads only • Enhanced Flexible Mode (EFM)</text>
+
+        <!-- YARN arrow -->
+        <line x1="378" y1="155" x2="396" y2="155" stroke="#243358" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- Cluster → GCS bidirectional -->
+        <line x1="405" y1="360" x2="405" y2="398" stroke="#00c8ff" stroke-width="1.5" marker-end="url(#arrBlue)"/>
+        <text x="370" y="382" fill="#5a6b8a" font-size="8" font-family="Space Mono, monospace">Read/Write</text>
+
+        <!-- GCS → Dataproc Metastore -->
+        <rect x="215" y="320" width="145" height="60" rx="10" fill="#151d30" stroke="#7b5cff" stroke-width="1.5"/>
+        <text x="288" y="344" text-anchor="middle" fill="#7b5cff" font-size="10" font-weight="700">Dataproc Metastore</text>
+        <text x="288" y="360" text-anchor="middle" fill="#9aaac8" font-size="8.5">Hive Metastore (HMS)</text>
+        <text x="288" y="374" text-anchor="middle" fill="#5a6b8a" font-size="7.5">Cloud SQL backed</text>
+
+        <line x1="308" y1="318" x2="308" y2="212" stroke="#7b5cff" stroke-width="1" stroke-dasharray="3,2"/>
+
+        <!-- GCP Services (right column) -->
+        <!-- BigQuery -->
+        <rect x="625" y="70" width="240" height="68" rx="10" fill="#151d30" stroke="#4285f4" stroke-width="1.5"/>
+        <text x="745" y="96" text-anchor="middle" fill="#4285f4" font-size="12" font-weight="700">🔷 BigQuery</text>
+        <text x="745" y="114" text-anchor="middle" fill="#9aaac8" font-size="8.5">Final Analytical Store</text>
+        <text x="745" y="128" text-anchor="middle" fill="#5a6b8a" font-size="7.5">SQL Analytics / ML / BI</text>
+
+        <!-- Pub/Sub -->
+        <rect x="625" y="160" width="240" height="68" rx="10" fill="#151d30" stroke="#34a853" stroke-width="1.5"/>
+        <text x="745" y="186" text-anchor="middle" fill="#34a853" font-size="12" font-weight="700">📨 Pub/Sub</text>
+        <text x="745" y="204" text-anchor="middle" fill="#9aaac8" font-size="8.5">Streaming Ingestion</text>
+        <text x="745" y="218" text-anchor="middle" fill="#5a6b8a" font-size="7.5">Events / Kafka alternative</text>
+
+        <!-- Vertex AI -->
+        <rect x="625" y="250" width="240" height="68" rx="10" fill="#151d30" stroke="#7b5cff" stroke-width="1.5"/>
+        <text x="745" y="276" text-anchor="middle" fill="#7b5cff" font-size="12" font-weight="700">🤖 Vertex AI</text>
+        <text x="745" y="294" text-anchor="middle" fill="#9aaac8" font-size="8.5">ML / Feature Engineering</text>
+        <text x="745" y="308" text-anchor="middle" fill="#5a6b8a" font-size="7.5">GPU clusters / Spark MLlib</text>
+
+        <!-- Cloud Composer -->
+        <rect x="625" y="340" width="240" height="68" rx="10" fill="#151d30" stroke="#00ffb3" stroke-width="1.5"/>
+        <text x="745" y="366" text-anchor="middle" fill="#00ffb3" font-size="12" font-weight="700">🎼 Cloud Composer</text>
+        <text x="745" y="384" text-anchor="middle" fill="#9aaac8" font-size="8.5">Airflow Orchestration</text>
+        <text x="745" y="398" text-anchor="middle" fill="#5a6b8a" font-size="7.5">DataprocSubmitJobOperator</text>
+
+        <!-- Monitoring -->
+        <rect x="625" y="430" width="240" height="55" rx="10" fill="#151d30" stroke="#ffcc00" stroke-width="1.5"/>
+        <text x="745" y="456" text-anchor="middle" fill="#ffcc00" font-size="11" font-weight="700">📊 Cloud Monitoring</text>
+        <text x="745" y="472" text-anchor="middle" fill="#9aaac8" font-size="8.5">Metrics / Alerts / Logging</text>
+
+        <!-- Arrows cluster → GCP services -->
+        <line x1="597" y1="105" x2="622" y2="105" stroke="#4285f4" stroke-width="1.5" marker-end="url(#arrBlue)"/>
+        <line x1="597" y1="195" x2="622" y2="195" stroke="#34a853" stroke-width="1.5" marker-end="url(#arrGreen)"/>
+        <line x1="597" y1="285" x2="622" y2="285" stroke="#7b5cff" stroke-width="1.5" marker-end="url(#arrBlue)"/>
+        <line x1="597" y1="360" x2="621" y2="370" stroke="#00ffb3" stroke-width="1.5" marker-end="url(#arrGreen)"/>
+        <line x1="597" y1="410" x2="622" y2="455" stroke="#ffcc00" stroke-width="1" stroke-dasharray="4,2"/>
+
+        <!-- Lightning Engine badge -->
+        <rect x="390" y="148" width="110" height="22" rx="11" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="1"/>
+        <text x="445" y="163" text-anchor="middle" fill="#00c8ff" font-size="8.5" font-weight="700">⚡ Lightning Engine</text>
+
+        <!-- Legend -->
+        <rect x="215" y="490" width="650" height="40" rx="8" fill="#0d1225" stroke="#1e2d4a" stroke-width="1"/>
+        <circle cx="235" cy="510" r="4" fill="#ff6b35"/>
+        <text x="245" y="514" fill="#9aaac8" font-size="8.5">On-Prem Sources</text>
+        <circle cx="320" cy="510" r="4" fill="#ffcc00"/>
+        <text x="330" y="514" fill="#9aaac8" font-size="8.5">Secure Transfer</text>
+        <circle cx="400" cy="510" r="4" fill="#00c8ff"/>
+        <text x="410" y="514" fill="#9aaac8" font-size="8.5">Dataproc Cluster</text>
+        <circle cx="490" cy="510" r="4" fill="#7b5cff"/>
+        <text x="500" y="514" fill="#9aaac8" font-size="8.5">Metastore</text>
+        <circle cx="565" cy="510" r="4" fill="#ff6b35" fill-opacity="0.5" stroke="#ff6b35" stroke-width="1" stroke-dasharray="2,1"/>
+        <text x="575" y="514" fill="#9aaac8" font-size="8.5">Preemptible (dashed)</text>
+        <circle cx="670" cy="510" r="4" fill="#4285f4"/>
+        <text x="680" y="514" fill="#9aaac8" font-size="8.5">GCP Services</text>
+        <circle cx="740" cy="510" r="4" fill="#34a853"/>
+        <text x="750" y="514" fill="#9aaac8" font-size="8.5">Monitoring</text>
+      </svg>
+    </div>
+
+    <div class="card" style="margin-top:1rem; background: rgba(0,200,255,0.04); border-color: rgba(0,200,255,0.15);">
+      <h3 style="color:var(--accent); font-size:0.9rem; margin-bottom:0.6rem;">🏗️ Key Architecture Principle</h3>
+      <p style="font-size:0.85rem; color:var(--text2);">
+        Dataproc <strong style="color:var(--text)">decouples compute from storage</strong>. Data lives permanently in <strong style="color:var(--accent)">GCS</strong>, not on the cluster's local HDFS. This means you can create ephemeral clusters, run jobs, and delete the cluster — your data is always safe. This is the single most important architectural distinction from on-prem Hadoop.
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DEPLOYMENT MODES -->
+  <section class="section" id="deployment">
+    <div class="section-label">03 — Deployment Modes</div>
+    <h2>Three Ways to Run Dataproc</h2>
+
+    <div class="mode-grid">
+      <div class="mode-card mode-cluster">
+        <div class="mode-icon">🖥️</div>
+        <h3>Cluster Deployment (CE)</h3>
+        <p>Full-control managed clusters on Compute Engine VMs. You define master, worker, and secondary worker nodes.</p>
+        <ul class="mode-list">
+          <li>Master + Worker + Preemptible VM nodes</li>
+          <li>YARN resource management</li>
+          <li>Autoscaling policies (YARN-based)</li>
+          <li>Initialization actions at startup</li>
+          <li>Supports Hadoop, Spark, Hive, Pig, Flink</li>
+          <li>HA: 3 master nodes config</li>
+          <li>Lightning Engine available (preview)</li>
+        </ul>
+      </div>
+      <div class="mode-card mode-serverless">
+        <div class="mode-icon">☁️</div>
+        <h3>Serverless Deployment</h3>
+        <p>Submit Spark jobs with zero cluster management. GCP auto-provisions, runs, and tears down infrastructure.</p>
+        <ul class="mode-list">
+          <li>No cluster creation or deletion</li>
+          <li>Per-job billing (DCU-hour pricing)</li>
+          <li>Batch workloads and interactive sessions</li>
+          <li>Airflow batch operator supported</li>
+          <li>Lightning Engine for 9.9× TPC-DS speed</li>
+          <li>Cannot scale to zero (min 1 executor)</li>
+          <li>Best for variable/sporadic workloads</li>
+        </ul>
+      </div>
+      <div class="mode-card mode-gke">
+        <div class="mode-icon">☸️</div>
+        <h3>Dataproc on GKE</h3>
+        <p>Run Spark jobs on existing GKE clusters using the Dataproc Jobs API for unified infrastructure.</p>
+        <ul class="mode-list">
+          <li>Spark 3.5 supported</li>
+          <li>Virtual clusters on GKE</li>
+          <li>No separate HDFS/YARN components</li>
+          <li>Kubernetes-native workload isolation</li>
+          <li>Supports PySpark, Scala, SparkR, SQL</li>
+          <li>Ideal for teams already on GKE</li>
+          <li>Submit via gcloud, console, or API</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- KEY FEATURES -->
+  <section class="section" id="features">
+    <div class="section-label">04 — Key Features</div>
+    <h2>Features You Must Know</h2>
+
+    <div class="card-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Lightning Engine</h3>
+        <p>Next-gen Spark execution layer with <strong style="color:var(--accent)">4.3× faster performance</strong> and up to 9.9× on TPC-DS. Zero code changes needed. Multi-tier caching, optimized shuffle, vectorized scans. Enabled with <code>--engine=lightning</code>.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h3>Autoscaling</h3>
+        <p>Automatically adjusts worker count based on <strong style="color:var(--accent)">YARN pending memory metrics</strong>. Configure scaleUpFactor, scaleDownFactor, cooldownPeriod, and gracefulDecommissionTimeout. Reduces VM spend by up to 40%.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Preemptible VMs</h3>
+        <p>Secondary workers using Spot VMs for <strong style="color:var(--accent)">60–80% cost savings</strong>. Use Enhanced Flexible Mode (EFM) for shuffle resilience when preemptions occur. Not for latency-sensitive workloads.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗄️</div>
+        <h3>Dataproc Metastore</h3>
+        <p>Fully managed Apache Hive Metastore (HMS). Serverless, autohealing, <strong style="color:var(--accent)">HA across zones</strong>. Shared among ephemeral clusters. Zonal and regional HA in Metastore v2. Cloud SQL backed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔧</div>
+        <h3>Initialization Actions</h3>
+        <p>Shell scripts that execute on cluster startup to install pip packages, configure environments, or run setup tasks. Stored in GCS. Run on master, workers, or all nodes.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>Component Gateway</h3>
+        <p>Access <strong style="color:var(--accent)">Spark UI, YARN, Jupyter, Zeppelin</strong> directly from the Google Cloud Console without SSH tunnels or firewall rules. Secured via IAP.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Workflow Templates</h3>
+        <p>DAG-like orchestration of multiple Dataproc jobs in a single API call. Define job dependencies, cluster lifecycle, and retry policies. Alternative to Airflow for simple pipelines.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧊</div>
+        <h3>Open Lakehouse Support</h3>
+        <p>Native support for <strong style="color:var(--accent)">Apache Iceberg, Delta Lake, Apache Hudi</strong>. Process open table formats directly from GCS. Integrates with BigQuery and Dataplex Universal Catalog.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>Gemini Integration</h3>
+        <p>AI-powered assistance to write and debug PySpark code. Gemini Cloud Assist provides automated root-cause analysis for failed or slow-running jobs. Reduces debugging time dramatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- WHEN TO USE -->
+  <section class="section">
+    <div class="section-label">05 — Decision Framework</div>
+    <h2>When to Use Dataproc vs Alternatives</h2>
+    <div class="use-grid">
+      <div class="use-yes">
+        <div class="use-heading">✅ Use Dataproc When...</div>
+        <ul class="use-list">
+          <li>Migrating existing Spark/Hadoop workloads from on-prem (lift-and-shift)</li>
+          <li>Complex ETL with custom Python/Java/Scala business logic</li>
+          <li>Need full control over Spark config, JARs, libraries</li>
+          <li>Processing semi-structured data (JSON, Avro, Parquet) at TB+ scale</li>
+          <li>Hive metastore compatibility needed</li>
+          <li>ML feature engineering with Spark MLlib at scale</li>
+          <li>Building open data lakehouses with Iceberg / Delta Lake</li>
+          <li>Migrating from Teradata, Cloudera, or HortonWorks</li>
+          <li>Need GPU support for AI/ML workloads</li>
+        </ul>
+      </div>
+      <div class="use-no">
+        <div class="use-heading">❌ Don't Use Dataproc When...</div>
+        <ul class="use-list">
+          <li>Pure SQL analytics → Use <strong>BigQuery</strong></li>
+          <li>Real-time streaming pipelines → Use <strong>Dataflow (Apache Beam)</strong></li>
+          <li>Fully serverless Spark (no cluster mgmt) → Use <strong>Dataproc Serverless</strong></li>
+          <li>Event ingestion only → Use <strong>Pub/Sub</strong></li>
+          <li>Small datasets, ad-hoc queries → Use <strong>BigQuery</strong></li>
+          <li>Structured streaming (Dataproc autoscaling doesn't support it)</li>
+          <li>Need cluster to scale to zero → Use <strong>Serverless mode</strong></li>
+          <li>Simple batch SQL transformations → Use <strong>dbt + BigQuery</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COMPARISON TABLE -->
+  <section class="section" id="compare">
+    <div class="section-label">06 — Service Comparison</div>
+    <h2>Dataproc vs Dataflow vs BigQuery vs Databricks</h2>
+
+    <div class="arch-diagram" style="padding:0; overflow:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Factor</th>
+            <th>Dataproc</th>
+            <th>Dataflow</th>
+            <th>BigQuery</th>
+            <th>Databricks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Framework</td>
+            <td>Spark / Hadoop / Flink</td>
+            <td>Apache Beam</td>
+            <td>SQL (Dremel engine)</td>
+            <td>Spark (optimized runtime)</td>
+          </tr>
+          <tr>
+            <td>Management</td>
+            <td>Semi-managed (cluster)</td>
+            <td>Fully serverless</td>
+            <td>Fully serverless</td>
+            <td>Managed platform</td>
+          </tr>
+          <tr>
+            <td>Use Case</td>
+            <td>Batch ETL, migration, ML</td>
+            <td>Streaming + Batch unified</td>
+            <td>SQL analytics, BI, OLAP</td>
+            <td>Lakehouse, collaboration</td>
+          </tr>
+          <tr>
+            <td>Scaling</td>
+            <td>Autoscale (YARN-based)</td>
+            <td>Fully auto (runner-based)</td>
+            <td>Serverless auto</td>
+            <td>Auto with DBU pricing</td>
+          </tr>
+          <tr>
+            <td>Code</td>
+            <td>Python, Scala, Java, SQL</td>
+            <td>Apache Beam SDK</td>
+            <td>SQL / BQML</td>
+            <td>Python, Scala, SQL</td>
+          </tr>
+          <tr>
+            <td>Migration</td>
+            <td>Lift-and-shift from on-prem</td>
+            <td>Rewrite in Beam</td>
+            <td>Data migration</td>
+            <td>Delta Lake native</td>
+          </tr>
+          <tr>
+            <td>Streaming</td>
+            <td>Limited (no autoscale)</td>
+            <td><span class="badge-yes">✓ Native</span></td>
+            <td><span class="badge-yes">✓ via BI Engine</span></td>
+            <td><span class="badge-yes">✓ Structured Streaming</span></td>
+          </tr>
+          <tr>
+            <td>Cost Model</td>
+            <td>$0.01/vCPU/hr + VM</td>
+            <td>Per worker/hr</td>
+            <td>Per TB scanned / slot</td>
+            <td>DBU-based pricing</td>
+          </tr>
+          <tr>
+            <td>Open Formats</td>
+            <td>Iceberg, Delta, Hudi</td>
+            <td>Avro, Parquet</td>
+            <td>Via BigLake</td>
+            <td>Delta Lake native</td>
+          </tr>
+          <tr>
+            <td>Cloud Lock-in</td>
+            <td>GCP-optimized</td>
+            <td>GCP (Dataflow runner)</td>
+            <td>GCP only</td>
+            <td>Multi-cloud</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COST MODEL -->
+  <section class="section">
+    <div class="section-label">07 — Cost Model</div>
+    <h2>Pricing You Must Know</h2>
+    <div class="cost-grid">
+      <div class="cost-card">
+        <div class="cost-title">Cluster Pricing</div>
+        <div class="cost-amount">$0.01</div>
+        <div class="cost-label">per vCPU per hour (+ Compute Engine VM costs)</div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-title">Example: 6 nodes × 4 vCPU × 2hr</div>
+        <div class="cost-amount">$0.48</div>
+        <div class="cost-label">Dataproc charge = 24 vCPUs × 2hrs × $0.01</div>
+      </div>
+      <div class="cost-card">
+        <div class="cost-title">Preemptible VM Savings</div>
+        <div class="cost-amount">60–80%</div>
+        <div class="cost-label">vs standard VMs for secondary workers</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3>💡 Cost Optimization Strategies (Exam Favourite)</h3>
+      <div class="pill-grid" style="margin-top:0.5rem;">
+        <span class="pill pill-green">Ephemeral clusters (create → job → delete)</span>
+        <span class="pill pill-green">Preemptible secondary workers</span>
+        <span class="pill pill-green">Autoscaling policies</span>
+        <span class="pill pill-green">Store data on GCS (not HDFS)</span>
+        <span class="pill pill-blue">Right-size machine types</span>
+        <span class="pill pill-blue">Serverless for sporadic jobs</span>
+        <span class="pill pill-blue">Labels for cost attribution</span>
+        <span class="pill pill-orange">Lightning Engine = fewer compute-hours</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- INTERVIEW QUESTIONS -->
+  <section class="section" id="questions">
+    <div class="section-label">08 — Interview Questions</div>
+    <h2>Lead & Principal Engineer Questions</h2>
+
+    <!-- CONCEPTUAL -->
+    <div class="q-section">
+      <div class="q-category cat-conceptual">🧠 Conceptual & Scenario</div>
+      <div class="q-accordion">
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q1</span>
+            <span class="q-text">What is the difference between Dataproc and Dataflow? When would you choose one over the other?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              <strong>Dataproc</strong> runs Spark/Hadoop workloads on managed clusters — ideal for <strong>batch ETL, existing Spark code migration, and full control over configuration</strong>. <strong>Dataflow</strong> is a fully serverless service using Apache Beam, ideal for <strong>unified batch and streaming pipelines</strong> without cluster management.
+              <ul>
+                <li><strong>Choose Dataproc:</strong> When migrating from on-prem Hadoop/Teradata, need Hive compatibility, custom JARs, Spark MLlib, or GPU support</li>
+                <li><strong>Choose Dataflow:</strong> When you need real-time streaming (e.g. Pub/Sub → BigQuery), unified batch+stream model, or zero infrastructure management</li>
+                <li>Key: Dataproc = lift-and-shift / custom; Dataflow = rewrite / serverless streaming</li>
+              </ul>
+              <div class="q-tip">💡 Tip: Mention that both can work together — Dataproc for heavy Spark ETL, Dataflow for streaming ingestion feeding the same GCS/BigQuery layer.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q2</span>
+            <span class="q-text">Why should you use GCS instead of HDFS for Dataproc storage?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              This is the <strong>most fundamental Dataproc best practice</strong>. GCS should be the persistent data store because:
+              <ul>
+                <li>Allows <strong>ephemeral clusters</strong> — create cluster → run job → delete cluster without losing data</li>
+                <li>GCS is <strong>durable (11 nines), scalable, and cheap</strong> vs maintaining HDFS on VMs</li>
+                <li>Clusters become <strong>stateless compute</strong> — no risk of data loss on preemption</li>
+                <li>Multiple clusters can <strong>share the same GCS data</strong> simultaneously</li>
+                <li>HDFS is ephemeral (lives on VM disks) — deleted when cluster is deleted</li>
+              </ul>
+              Use HDFS only for <strong>temporary shuffle data</strong> during a job, never for persistent datasets.
+              <div class="q-tip">💡 Tip: "Decouple compute from storage" is the golden phrase. Always say this first.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q3</span>
+            <span class="q-text">What is Dataproc Serverless and how does it differ from cluster-based Dataproc?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              <strong>Dataproc Serverless</strong> (now called "Managed Service for Apache Spark — serverless deployment") lets you submit Spark jobs without provisioning or managing clusters. GCP automatically provisions compute, runs the job, and tears everything down.
+              <ul>
+                <li><strong>No cluster management:</strong> Submit via gcloud, REST API, or Console</li>
+                <li><strong>Per-job billing:</strong> Pay only for job execution time (DCU-hour pricing)</li>
+                <li><strong>Lightning Engine:</strong> 9.9× TPC-DS performance, zero code changes</li>
+                <li><strong>Limitation:</strong> Less customization (no init actions, limited Spark config)</li>
+                <li><strong>Limitation:</strong> Cannot scale to zero — minimum 1 executor during execution</li>
+                <li><strong>Best for:</strong> Sporadic/variable batch jobs, teams that want zero infra overhead</li>
+              </ul>
+              <div class="q-tip">💡 Tip: Serverless = pay per use, cluster = pay per hour running. Choose serverless for infrequent jobs, cluster for high-frequency steady workloads.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q4</span>
+            <span class="q-text">We are migrating from Teradata on-premises to GCP. How would you approach this?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              A Teradata migration is a multi-phase project:
+              <ul>
+                <li><strong>Assessment:</strong> Use <code>BigQuery Migration Service (BQMS)</code> — free tool that translates Teradata SQL (QUALIFY, RESET WHEN, TOP n, BTEQ) to BigQuery SQL and gives compatibility reports</li>
+                <li><strong>Data Transfer:</strong> Use Teradata TPT/BTEQ to export as Parquet/CSV → upload to GCS via Storage Transfer Service or <code>gsutil</code></li>
+                <li><strong>Transform:</strong> Use Dataproc/PySpark to clean, reformat, and validate data before loading to BigQuery</li>
+                <li><strong>Ongoing CDC:</strong> Use <code>Datastream</code> for Change Data Capture — continuously replicate Teradata changes to GCS/BigQuery</li>
+                <li><strong>Connectivity:</strong> VPN or Cloud Interconnect for secure network tunnel from on-prem to GCP</li>
+                <li><strong>Validation:</strong> Row counts, checksums, sample data comparison between Teradata and BigQuery</li>
+              </ul>
+              <div class="q-tip">💡 Tip: Mention all four tools: BQMS + Datastream + Dataproc + Storage Transfer. This shows end-to-end thinking a Principal Engineer is expected to have.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TECHNICAL -->
+    <div class="q-section">
+      <div class="q-category cat-technical">⚙️ Technical Deep Dive</div>
+      <div class="q-accordion">
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q5</span>
+            <span class="q-text">How does Dataproc autoscaling work? What are its limitations?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Autoscaling works by monitoring <strong>YARN pending memory metrics</strong>:
+              <ul>
+                <li><strong>Scale up:</strong> When pending memory (requested but not allocated) exceeds available memory</li>
+                <li><strong>Scale down:</strong> When there is excess unused capacity in the cluster</li>
+                <li><strong>Key parameters:</strong> <code>scaleUpFactor</code>, <code>scaleDownFactor</code>, <code>cooldownPeriod</code>, <code>gracefulDecommissionTimeout</code></li>
+                <li>Reduces VM expenditures by up to <strong>40%</strong> and runtime by 10% per Google evaluations</li>
+              </ul>
+              <strong>Limitations:</strong>
+              <ul>
+                <li>❌ Does NOT support <strong>Spark Structured Streaming</strong></li>
+                <li>❌ Cannot scale <strong>to zero</strong> — at least one node always runs</li>
+                <li>❌ One autoscaling policy per cluster — doesn't adapt to multiple job types</li>
+                <li>✅ Use <strong>EFM (Enhanced Flexible Mode)</strong> when mixing primary + preemptible workers to protect shuffle data</li>
+              </ul>
+              <div class="q-tip">💡 Tip: Know the difference between autoscaling (YARN-based, cluster-level) and Serverless auto-provisioning (job-level, fully managed).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q6</span>
+            <span class="q-text">How would you configure Spark properties on a Dataproc cluster?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Three ways to set Spark properties:
+<pre><span class="cm"># 1. At cluster creation (--properties flag)</span>
+<span class="fn">gcloud</span> dataproc clusters create my-cluster \
+  --region=us-central1 \
+  --properties=<span class="str">"spark:spark.executor.memory=4g,\
+spark:spark.driver.memory=2g,\
+yarn:yarn.nodemanager.resource.memory-mb=8192"</span>
+
+<span class="cm"># 2. At job submission</span>
+<span class="fn">gcloud</span> dataproc jobs submit pyspark job.py \
+  --cluster=my-cluster \
+  --properties=<span class="str">"spark:spark.sql.shuffle.partitions=200"</span>
+
+<span class="cm"># 3. In PySpark code</span>
+spark = SparkSession.builder \
+  .config(<span class="str">"spark.executor.memory"</span>, <span class="str">"4g"</span>) \
+  .getOrCreate()</pre>
+              Property prefixes: <code>spark:</code>, <code>yarn:</code>, <code>hdfs:</code>, <code>hive:</code>
+              <div class="q-tip">💡 Tip: Always use the prefix format. A common mistake in interviews is forgetting the <code>spark:</code> namespace prefix.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q7</span>
+            <span class="q-text">How do you handle Hive metastore when using ephemeral Dataproc clusters?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              This is a critical architecture decision. If you use the embedded Hive metastore (default), metadata is <strong>lost when the cluster is deleted</strong>. Solutions:
+              <ul>
+                <li><strong>Dataproc Metastore (recommended):</strong> Fully managed HMS backed by Cloud SQL. Serverless, HA, autohealing. Multiple ephemeral clusters can share the same metastore. Version 2 supports zonal + regional HA.</li>
+                <li><strong>Cloud SQL external metastore:</strong> Point Hive to a Cloud SQL (MySQL/PostgreSQL) instance. More control but you manage Cloud SQL.</li>
+                <li><strong>BigLake Metastore:</strong> For BigQuery + Spark unified metadata discovery</li>
+              </ul>
+              Connect cluster to Dataproc Metastore via:
+              <pre><span class="fn">gcloud</span> dataproc clusters create my-cluster \
+  --dataproc-metastore=projects/PROJECT/locations/REGION/services/METASTORE_ID</pre>
+              <div class="q-tip">💡 Tip: Lead-level answer = always mention Dataproc Metastore v2 for HA. Principal-level = discuss DR strategy and regional failover.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q8</span>
+            <span class="q-text">What is Enhanced Flexible Mode (EFM) and when do you use it?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              <strong>EFM (Enhanced Flexible Mode)</strong> is a Dataproc feature that protects shuffle data when using preemptible VMs as secondary workers.
+              <ul>
+                <li>Problem: When a preemptible VM is preempted mid-job, shuffle data on that node is lost → job fails</li>
+                <li>EFM solution: Shuffle data is written to <strong>primary workers</strong> or <strong>GCS</strong> instead of secondary workers</li>
+                <li>Highly recommended for clusters with preemptible VMs or autoscaling secondary workers</li>
+                <li>Ensure correct ratio of primary to secondary workers — very high secondary ratios can bottleneck shuffle on primaries</li>
+                <li>Tune shuffle parameters beyond defaults when EFM is enabled</li>
+              </ul>
+              <div class="q-tip">💡 Tip: EFM = shuffle resilience. This shows you understand the failure modes of preemptible workers at a Principal level.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q9</span>
+            <span class="q-text">How do you enable the Lightning Engine in Dataproc and what does it do?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              <strong>Lightning Engine</strong> is Google's next-gen Spark execution layer delivering <strong>4.3× faster performance</strong> (up to 9.9× on TPC-DS) with zero code changes:
+<pre><span class="cm"># Enable Lightning Engine at cluster creation</span>
+<span class="fn">gcloud</span> dataproc clusters create CLUSTER_NAME \
+  --region=REGION \
+  --engine=<span class="str">lightning</span> \
+  --image-version=<span class="num">2.3</span>
+
+<span class="cm"># Optional: Enable native runtime by default</span>
+<span class="fn">gcloud</span> dataproc clusters create CLUSTER_NAME \
+  --engine=<span class="str">lightning</span> \
+  --properties=<span class="str">'spark:spark.dataproc.lightningEngine.runtime=native'</span></pre>
+              How it works:
+              <ul>
+                <li><strong>Multi-tier caching:</strong> Hot data cached in memory and local SSD — reduces GCS reads</li>
+                <li><strong>Optimized shuffle:</strong> Replaces standard Spark shuffle with a more efficient mechanism</li>
+                <li><strong>Vectorized scans:</strong> Parquet row group prefetching, reduced metadata calls to GCS</li>
+                <li><strong>Intelligent query optimization:</strong> Dynamically reduces data scanned, more efficient execution plans</li>
+                <li>Currently in <strong>preview</strong> for Dataproc on Compute Engine; GA for Serverless</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div class="q-section">
+      <div class="q-category cat-architecture">🏗️ Architecture & Design</div>
+      <div class="q-accordion">
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q10</span>
+            <span class="q-text">Design a production-grade batch ETL pipeline using Dataproc on GCP.</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              A production-grade pipeline:
+              <ul>
+                <li><strong>Orchestration:</strong> Cloud Composer (Airflow) with <code>DataprocCreateClusterOperator</code> + <code>DataprocSubmitJobOperator</code> + <code>DataprocDeleteClusterOperator</code></li>
+                <li><strong>Trigger:</strong> Cloud Scheduler (CRON) or event-driven via Pub/Sub + Cloud Functions</li>
+                <li><strong>Cluster:</strong> Ephemeral, created at job start, deleted after job — with HA (3 masters) for prod</li>
+                <li><strong>Storage:</strong> Raw data in GCS with partitioned paths (<code>gs://bucket/raw/year=2026/month=05/day=01/</code>)</li>
+                <li><strong>Transform:</strong> PySpark reads partitioned data, applies business logic, writes to GCS as Parquet</li>
+                <li><strong>Load:</strong> BigQuery connector writes final tables; use partitioned + clustered tables</li>
+                <li><strong>Metastore:</strong> Dataproc Metastore v2 (shared, HA) for Hive table metadata</li>
+                <li><strong>Monitoring:</strong> Cloud Monitoring alerts on job failures, YARN metrics; Logs → Cloud Logging</li>
+                <li><strong>Security:</strong> VPC Service Controls, private cluster (no external IPs), IAM least privilege, CMEK</li>
+                <li><strong>Cost:</strong> Preemptible secondary workers + autoscaling + EFM enabled</li>
+              </ul>
+              <div class="q-tip">💡 Tip: Lead-level answer covers orchestration + monitoring. Principal-level adds DR strategy, security controls, cost optimization, and data quality checks (Great Expectations / Dataplex).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q11</span>
+            <span class="q-text">How do you secure a Dataproc cluster in a regulated enterprise environment?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Multi-layered security for regulated environments (HIPAA, PCI, SOC2):
+              <ul>
+                <li><strong>Network:</strong> Deploy in a VPC with no external IPs (<code>--no-address</code>), use Private Google Access to reach GCP APIs without internet</li>
+                <li><strong>VPC Service Controls:</strong> Create a security perimeter that prevents data exfiltration from GCS, BigQuery, and Dataproc APIs</li>
+                <li><strong>IAM:</strong> Dedicated service account for Dataproc with least-privilege roles (<code>roles/dataproc.worker</code>). Never use default Compute SA.</li>
+                <li><strong>Kerberos:</strong> Enable for Hadoop ecosystem authentication between nodes</li>
+                <li><strong>Encryption:</strong> CMEK (Customer-Managed Encryption Keys) with Cloud KMS for data at rest and in transit</li>
+                <li><strong>Audit Logging:</strong> Enable Cloud Audit Logs (Data Access logs) for all Dataproc API calls</li>
+                <li><strong>Metadata protection:</strong> Disable legacy metadata server endpoints on VMs</li>
+                <li><strong>Shielded VMs:</strong> Enable Secure Boot, vTPM, and integrity monitoring on cluster nodes</li>
+              </ul>
+              <div class="q-tip">💡 Tip: VPC Service Controls is the most important security control to mention — it prevents data exfiltration even from compromised credentials.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q12</span>
+            <span class="q-text">How do you orchestrate Dataproc from Cloud Composer (Airflow)?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Cloud Composer has native Dataproc operators:
+<pre><span class="kw">from</span> airflow.providers.google.cloud.operators.dataproc <span class="kw">import</span> (
+    DataprocCreateClusterOperator,
+    DataprocSubmitJobOperator,
+    DataprocDeleteClusterOperator
+)
+
+<span class="cm"># 1. Create ephemeral cluster</span>
+create = DataprocCreateClusterOperator(
+    task_id=<span class="str">"create_cluster"</span>,
+    project_id=PROJECT_ID,
+    cluster_config=CLUSTER_CONFIG,
+    region=REGION,
+    cluster_name=<span class="str">"etl-cluster-{{ ds_nodash }}"</span>
+)
+
+<span class="cm"># 2. Submit PySpark job</span>
+submit = DataprocSubmitJobOperator(
+    task_id=<span class="str">"run_etl"</span>,
+    job={<span class="str">"pyspark_job"</span>: {<span class="str">"main_python_file_uri"</span>: <span class="str">"gs://bucket/etl.py"</span>}},
+    region=REGION, project_id=PROJECT_ID
+)
+
+<span class="cm"># 3. Delete cluster (always, even on failure)</span>
+delete = DataprocDeleteClusterOperator(
+    task_id=<span class="str">"delete_cluster"</span>,
+    project_id=PROJECT_ID,
+    cluster_name=<span class="str">"etl-cluster-{{ ds_nodash }}"</span>,
+    trigger_rule=<span class="str">"all_done"</span>  <span class="cm"># Critical!</span>
+)
+
+create >> submit >> delete</pre>
+              <strong>Key:</strong> Use <code>trigger_rule="all_done"</code> on delete so the cluster is always cleaned up even if the job fails.
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q13</span>
+            <span class="q-text">How would you build a modern data lakehouse using Dataproc on GCP?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              A GCP Data Lakehouse pattern:
+              <ul>
+                <li><strong>Storage Layer:</strong> GCS as the lake (raw, refined, curated zones in open formats — Parquet/Iceberg)</li>
+                <li><strong>Open Table Format:</strong> Apache Iceberg on GCS — provides ACID transactions, time travel, schema evolution, partition evolution</li>
+                <li><strong>Processing Engine:</strong> Dataproc/Spark reads/writes Iceberg tables directly from GCS (no data movement)</li>
+                <li><strong>Governance:</strong> Dataplex Universal Catalog for metadata, lineage, data quality, and policy enforcement</li>
+                <li><strong>SQL Access:</strong> BigQuery via BigLake — query Iceberg on GCS using BigQuery SQL without copying data</li>
+                <li><strong>Unified Metadata:</strong> BigLake Metastore as federated Spark metastore — BigQuery tables instantly discoverable in Dataproc Spark</li>
+                <li><strong>Multi-engine:</strong> Dataproc (Spark), BigQuery, and Trino/Presto all read the same Iceberg tables</li>
+              </ul>
+              <div class="q-tip">💡 Tip: The lakehouse pattern = GCS + Iceberg + Dataproc + BigLake + Dataplex. Mentioning all five components signals Principal-level architecture thinking.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ADVANCED -->
+    <div class="q-section">
+      <div class="q-category cat-advanced">🔥 Advanced / Principal Level</div>
+      <div class="q-accordion">
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q14</span>
+            <span class="q-text">A Spark job on Dataproc is running slowly. How do you diagnose and fix it?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Systematic performance diagnosis:
+              <ul>
+                <li><strong>Step 1 — Spark UI:</strong> Access via Component Gateway. Look for: long stages, skewed partitions, spill to disk, shuffle read/write sizes</li>
+                <li><strong>Step 2 — YARN UI:</strong> Check for pending containers → scale up or autoscale issue</li>
+                <li><strong>Step 3 — Cloud Monitoring:</strong> CPU, memory, disk I/O on each node. GCS throttling? HDFS pressure?</li>
+                <li><strong>Common root causes and fixes:</strong></li>
+                <li>🔴 <strong>Data skew:</strong> Use salting, <code>repartition()</code>, or AQE (Adaptive Query Execution)</li>
+                <li>🔴 <strong>Shuffle bottleneck:</strong> Increase <code>spark.sql.shuffle.partitions</code>, enable EFM, use local SSDs</li>
+                <li>🔴 <strong>Small files problem:</strong> Coalesce before writing, use Iceberg/Hudi compaction</li>
+                <li>🔴 <strong>GC pressure:</strong> Tune executor memory, increase off-heap memory, reduce partitions</li>
+                <li>🔴 <strong>Executor OOM:</strong> Increase <code>spark.executor.memory</code> or reduce <code>spark.executor.cores</code></li>
+                <li>🟢 <strong>Lightning Engine:</strong> Enable for automatic query optimization with zero code changes</li>
+                <li>🟢 <strong>Gemini Cloud Assist:</strong> Get automated root-cause analysis for failed jobs</li>
+              </ul>
+              <div class="q-tip">💡 Tip: Lead = identify the problem. Principal = implement systematic APM, set Monitoring alerts on Spark metrics, proactively catch issues before they impact SLAs.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q15</span>
+            <span class="q-text">How do you implement IaC (Infrastructure as Code) for Dataproc using Terraform?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Production Terraform for Dataproc:
+<pre><span class="kw">resource</span> <span class="str">"google_dataproc_autoscaling_policy"</span> <span class="str">"policy"</span> {
+  policy_id = <span class="str">"etl-autoscale-${var.environment}"</span>
+  location  = <span class="str">var.region</span>
+  worker_config {
+    min_instances = <span class="num">2</span>
+    max_instances = <span class="num">20</span>
+  }
+  secondary_worker_config {
+    min_instances = <span class="num">0</span>
+    max_instances = <span class="num">50</span>  <span class="cm"># preemptible burst</span>
+  }
+  basic_algorithm {
+    yarn_config {
+      scale_up_factor   = <span class="num">1.0</span>
+      scale_down_factor = <span class="num">1.0</span>
+      graceful_decommission_timeout = <span class="str">"3600s"</span>
+    }
+    cooldown_period = <span class="str">"120s"</span>
+  }
+}
+
+<span class="kw">resource</span> <span class="str">"google_dataproc_cluster"</span> <span class="str">"prod"</span> {
+  name   = <span class="str">"spark-cluster-${var.environment}"</span>
+  region = <span class="str">var.region</span>
+  cluster_config {
+    master_config { num_instances = <span class="num">3</span>; machine_type = <span class="str">"n2-standard-8"</span> }
+    worker_config { num_instances = <span class="num">4</span>; machine_type = <span class="str">"n2-standard-8"</span> }
+    preemptible_worker_config { num_instances = <span class="num">8</span> }
+    autoscaling_config {
+      policy_uri = <span class="fn">google_dataproc_autoscaling_policy</span>.policy.name
+    }
+    software_config {
+      image_version = <span class="str">"2.3-debian12"</span>
+      optional_components = [<span class="str">"JUPYTER"</span>]
+    }
+    endpoint_config { enable_http_port_access = <span class="kw">true</span> }  <span class="cm"># Component Gateway</span>
+  }
+}</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q16</span>
+            <span class="q-text">How would you read data from Teradata into Dataproc using Spark JDBC in parallel?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Parallel JDBC reads require partitioning the query:
+<pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> SparkSession
+
+spark = SparkSession.builder.appName(<span class="str">"TeradataETL"</span>).getOrCreate()
+
+df = spark.read \
+  .format(<span class="str">"jdbc"</span>) \
+  .option(<span class="str">"url"</span>, <span class="str">"jdbc:teradata://host/DATABASE=mydb"</span>) \
+  .option(<span class="str">"dbtable"</span>, <span class="str">"sales.orders"</span>) \
+  .option(<span class="str">"driver"</span>, <span class="str">"com.teradata.jdbc.TeraDriver"</span>) \
+  .option(<span class="str">"user"</span>, <span class="str">TD_USER</span>) \
+  .option(<span class="str">"password"</span>, <span class="str">TD_PASS</span>) \
+  .option(<span class="str">"numPartitions"</span>, <span class="str">"20"</span>)       <span class="cm"># parallel reads</span> \
+  .option(<span class="str">"partitionColumn"</span>, <span class="str">"order_id"</span>) \
+  .option(<span class="str">"lowerBound"</span>, <span class="str">"1"</span>) \
+  .option(<span class="str">"upperBound"</span>, <span class="str">"10000000"</span>) \
+  .load()
+
+<span class="cm"># Land to GCS as Parquet</span>
+df.write.mode(<span class="str">"overwrite"</span>) \
+  .partitionBy(<span class="str">"year"</span>, <span class="str">"month"</span>) \
+  .parquet(<span class="str">"gs://bucket/refined/orders/"</span>)</pre>
+              Best practices:
+              <ul>
+                <li>Store Teradata credentials in <strong>Secret Manager</strong>, not hardcoded</li>
+                <li>Add <strong>Teradata JDBC JAR</strong> via init action or <code>--jars gs://bucket/TeraDriver.jar</code></li>
+                <li>Use <strong>Cloud Interconnect</strong> for bandwidth and latency vs public VPN</li>
+                <li>Avoid pulling too many partitions simultaneously — can overload Teradata AMPs</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-header" onclick="toggle(this)">
+            <span class="q-num">Q17</span>
+            <span class="q-text">How do you implement data quality checks in a Dataproc pipeline at scale?</span>
+            <span class="q-chevron">▼</span>
+          </div>
+          <div class="q-answer">
+            <div class="q-answer-inner">
+              Principal-level data quality strategy:
+              <ul>
+                <li><strong>Dataplex Data Quality:</strong> Native GCP service — define YAML-based quality rules on BigQuery/GCS tables. Runs as managed jobs, results in BigQuery.</li>
+                <li><strong>Great Expectations in PySpark:</strong> Open-source framework. Validate row counts, null rates, value ranges, uniqueness, referential integrity after each transformation step.</li>
+                <li><strong>In-pipeline checks:</strong> After each Spark transformation, run <code>df.count()</code> assertions, null checks, schema validation. Fail fast before loading to BigQuery.</li>
+                <li><strong>Quarantine pattern:</strong> On failure, route bad records to a <code>gs://bucket/quarantine/</code> GCS path instead of failing the entire job. Alert + send to DQ dashboard.</li>
+                <li><strong>Statistical validation:</strong> Compare row counts, sum/avg of key columns between source (Teradata) and destination (BigQuery) post-load.</li>
+                <li><strong>Cloud Monitoring:</strong> Custom metrics for DQ pass/fail rates, bad record counts. Alert SRE team on threshold breaches.</li>
+              </ul>
+              <div class="q-tip">💡 Tip: Principal-level = proactive DQ architecture, not just "add a check". Mention the quarantine pattern and monitoring integration.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BEST PRACTICES -->
+  <section class="section" id="best-practices">
+    <div class="section-label">09 — Best Practices</div>
+    <h2>Production Best Practices Cheat Sheet</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3 style="color:var(--accent)">💾 Storage</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.83rem; color:var(--text2);">
+          <li>→ Always use GCS over HDFS for persistent data</li>
+          <li>→ Partition GCS paths: <code>year=/month=/day=</code></li>
+          <li>→ Use Parquet or ORC (columnar formats) over CSV</li>
+          <li>→ Enable Apache Iceberg for ACID + time travel</li>
+          <li>→ Set GCS lifecycle rules for old raw data</li>
+          <li>→ Use uniform bucket-level access (no ACLs)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent2)">⚡ Performance</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.83rem; color:var(--text2);">
+          <li>→ Enable Lightning Engine (<code>--engine=lightning</code>)</li>
+          <li>→ Use local SSDs for shuffle-heavy workloads</li>
+          <li>→ Tune <code>spark.sql.shuffle.partitions</code></li>
+          <li>→ Enable AQE (Adaptive Query Execution)</li>
+          <li>→ Use broadcast joins for small dimension tables</li>
+          <li>→ Avoid small files — coalesce before writing</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent3)">💰 Cost</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.83rem; color:var(--text2);">
+          <li>→ Use ephemeral clusters — delete after job</li>
+          <li>→ Preemptible secondary workers + EFM</li>
+          <li>→ Autoscaling for variable workloads</li>
+          <li>→ Use Serverless for sporadic jobs</li>
+          <li>→ Apply labels for cost attribution to teams</li>
+          <li>→ Right-size machines — avoid over-provisioning</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent4)">🔒 Security</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.83rem; color:var(--text2);">
+          <li>→ Dedicated service account (not default)</li>
+          <li>→ Private cluster (no external IPs)</li>
+          <li>→ VPC Service Controls perimeter</li>
+          <li>→ Kerberos for Hadoop auth</li>
+          <li>→ CMEK with Cloud KMS</li>
+          <li>→ Secret Manager for credentials</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--warn)">📊 Operations</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.83rem; color:var(--text2);">
+          <li>→ Use Workflow Templates or Cloud Composer</li>
+          <li>→ Alert on YARN pending memory spikes</li>
+          <li>→ Component Gateway for Spark/YARN UI access</li>
+          <li>→ Use <code>gcloud dataproc diagnose</code> for debugging</li>
+          <li>→ Pin image versions in production clusters</li>
+          <li>→ Use Gemini Cloud Assist for RCA on failures</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--google-blue)">🔗 Integration</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.4rem; font-size:0.83rem; color:var(--text2);">
+          <li>→ BigQuery connector for direct BQ writes</li>
+          <li>→ Dataproc Metastore v2 for shared HMS</li>
+          <li>→ Vertex AI for ML feature pipelines</li>
+          <li>→ Dataplex for governance and DQ</li>
+          <li>→ Cloud Composer for complex orchestration</li>
+          <li>→ Pub/Sub for event-driven pipeline triggers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- QUICK REFERENCE -->
+  <section class="section">
+    <div class="section-label">10 — Quick Reference</div>
+    <h2>Teradata → GCP Migration Cheat Sheet</h2>
+    <div class="arch-diagram" style="padding:0; overflow:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr><th>Teradata Concept</th><th>GCP Equivalent</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Teradata DB</td><td>BigQuery Dataset</td><td>Final destination for SQL analytics</td></tr>
+          <tr><td>BTEQ / TPT</td><td>Dataproc + PySpark</td><td>Extract & transform workloads</td></tr>
+          <tr><td>Teradata SQL</td><td>BigQuery SQL</td><td>Use BQMS for automated translation</td></tr>
+          <tr><td>QUALIFY ROW_NUMBER()</td><td>QUALIFY ROW_NUMBER()</td><td>BigQuery supports QUALIFY natively</td></tr>
+          <tr><td>FastExport / FastLoad</td><td>Storage Transfer Service</td><td>Bulk data movement to GCS</td></tr>
+          <tr><td>Teradata CDC</td><td>Datastream</td><td>Change Data Capture to GCS/BigQuery</td></tr>
+          <tr><td>Teradata Indexes</td><td>BQ Partitioning + Clustering</td><td>Replaces PI/SI for query performance</td></tr>
+          <tr><td>Spool Space</td><td>GCS (temp)</td><td>Intermediate Spark results in GCS</td></tr>
+          <tr><td>TDPID / TDP</td><td>Cloud Interconnect / VPN</td><td>Secure on-prem to cloud connectivity</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Built from <span>official Google Cloud documentation</span> · Last updated April 2026 · For Lead & Principal Data Engineer Interview Preparation
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const el = document.getElementById('progress');
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    el.style.width = pct + '%';
+  });
+
+  // Accordion toggle
+  function toggle(header) {
+    const item = header.parentElement;
+    const wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.q-item.open').forEach(i => i.classList.remove('open'));
+    // Open clicked if it was closed
+    if (!wasOpen) item.classList.add('open');
+  }
+
+  // Intersection observer for section animations
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.style.animationPlayState = 'running';
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.section').forEach(s => {
+    s.style.animationPlayState = 'paused';
+    observer.observe(s);
+  });
+</script>
+</body>
+</html>

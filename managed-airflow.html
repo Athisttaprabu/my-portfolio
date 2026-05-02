@@ -4,12 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gen AI Learnings | Athisttaprabu Ramalingam</title>
+    <title>Managed Airflow | Athisttaprabu Ramalingam</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .coming-soon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            background: radial-gradient(circle at top right, #e9ecef 0%, var(--bg-dark) 50%);
+        }
+
+        .coming-soon-content h1 {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .coming-soon-content p {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+    </style>
 </head>
 
 <body>
@@ -32,27 +55,14 @@
         </nav>
     </header>
 
-    <main class="article-container">
-        
-        <header class="article-header">
-            <h1>Welcome to Gen AI learnings...!</h1>
-            <p>Explore my journey and technical insights into Generative AI.</p>
-        </header>
-
-        <section class="article-list">
-            <a href="google-gemini-api.html" class="article-card">
-                <h3>Page 1: Google Gemini API</h3>
-                <p>Learn how to use Google Gemini for text summarization and structured data extraction in data pipelines.</p>
-                <span class="read-more">Read Article <i class="fas fa-arrow-right"></i></span>
-            </a>
-            
-            <!-- Future articles can be added here -->
-            <div class="article-card" style="opacity: 0.7; cursor: default;">
-                <h3>Coming Soon: RAG Architectures</h3>
-                <p>An in-depth look at Retrieval-Augmented Generation for enterprise data sets.</p>
-                <span class="read-more" style="color: var(--text-secondary);">Coming Soon</span>
+    <main>
+        <div class="coming-soon-container">
+            <div class="coming-soon-content">
+                <i class="fas fa-tools" style="font-size: 5rem; color: var(--accent); margin-bottom: 30px;"></i>
+                <h1>Managed Airflow</h1>
+                <p>This article is currently being written. Stay tuned!</p>
             </div>
-        </section>
+        </div>
     </main>
 
     <!-- Tech Articles Modal -->

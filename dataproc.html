@@ -7,21 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0e1a;
-    --bg2: #0d1225;
-    --bg3: #111828;
-    --surface: #151d30;
-    --surface2: #1c2540;
-    --border: #1e2d4a;
-    --border2: #243358;
-    --accent: #00c8ff;
-    --accent2: #7b5cff;
-    --accent3: #00ffb3;
-    --accent4: #ff6b35;
-    --warn: #ffcc00;
-    --text: #e8edf8;
-    --text2: #9aaac8;
-    --text3: #5a6b8a;
+    --bg: #f8f9fa;
+    --bg2: #ffffff;
+    --bg3: #e9ecef;
+    --surface: #ffffff;
+    --surface2: #f8f9fa;
+    --border: #dee2e6;
+    --border2: #adb5bd;
+    --accent: #0077b6;
+    --accent2: #6b4cff;
+    --accent3: #059669;
+    --accent4: #e85d04;
+    --warn: #f59e0b;
+    --text: #212529;
+    --text2: #495057;
+    --text3: #6c757d;
     --google-blue: #4285f4;
     --google-red: #ea4335;
     --google-yellow: #fbbc05;
@@ -46,8 +46,8 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      linear-gradient(rgba(0,119,182,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,119,182,0.06) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;
@@ -58,7 +58,7 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
-    background: rgba(10,14,26,0.92);
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
     padding: 0 2rem;
@@ -95,7 +95,7 @@
 
   .nav-links a:hover {
     color: var(--accent);
-    background: rgba(0,200,255,0.08);
+    background: rgba(0,119,182,0.08);
   }
 
   /* ── MAIN LAYOUT ── */
@@ -117,8 +117,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(0,200,255,0.07);
-    border: 1px solid rgba(0,200,255,0.2);
+    background: rgba(0,119,182,0.07);
+    border: 1px solid rgba(0,119,182,0.2);
     border-radius: 100px;
     padding: 0.35rem 1rem;
     font-family: 'Space Mono', monospace;
@@ -263,8 +263,8 @@
 
   /* ── WHAT IS DATAPROC ── */
   .definition-box {
-    background: linear-gradient(135deg, rgba(0,200,255,0.05) 0%, rgba(123,92,255,0.05) 100%);
-    border: 1px solid rgba(0,200,255,0.2);
+    background: linear-gradient(135deg, rgba(0,119,182,0.05) 0%, rgba(107,76,255,0.05) 100%);
+    border: 1px solid rgba(0,119,182,0.2);
     border-radius: 16px;
     padding: 2rem;
     position: relative;
@@ -277,7 +277,7 @@
     right: 1.5rem; top: 1rem;
     font-family: 'Space Mono', monospace;
     font-size: 5rem;
-    color: rgba(0,200,255,0.04);
+    color: rgba(0,119,182,0.04);
     font-weight: 700;
   }
 
@@ -293,8 +293,8 @@
 
   /* ── NEW NAME ALERT ── */
   .alert-banner {
-    background: rgba(251,188,5,0.08);
-    border: 1px solid rgba(251,188,5,0.3);
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.3);
     border-radius: 10px;
     padding: 1rem 1.4rem;
     display: flex;
@@ -327,10 +327,10 @@
     transition: all 0.2s;
   }
 
-  .pill-blue { color: var(--accent); border-color: rgba(0,200,255,0.25); background: rgba(0,200,255,0.06); }
-  .pill-purple { color: var(--accent2); border-color: rgba(123,92,255,0.25); background: rgba(123,92,255,0.06); }
-  .pill-green { color: var(--accent3); border-color: rgba(0,255,179,0.25); background: rgba(0,255,179,0.06); }
-  .pill-orange { color: var(--accent4); border-color: rgba(255,107,53,0.25); background: rgba(255,107,53,0.06); }
+  .pill-blue { color: var(--accent); border-color: rgba(0,119,182,0.25); background: rgba(0,119,182,0.06); }
+  .pill-purple { color: var(--accent2); border-color: rgba(107,76,255,0.25); background: rgba(107,76,255,0.06); }
+  .pill-green { color: var(--accent3); border-color: rgba(5,150,105,0.25); background: rgba(5,150,105,0.06); }
+  .pill-orange { color: var(--accent4); border-color: rgba(232,93,4,0.25); background: rgba(232,93,4,0.06); }
 
   /* ── ARCHITECTURE DIAGRAM ── */
   .arch-diagram {
@@ -367,12 +367,12 @@
 
   .compare-table td {
     padding: 0.85rem 1rem;
-    border-bottom: 1px solid rgba(30,45,74,0.5);
+    border-bottom: 1px solid rgba(222,226,230,0.5);
     color: var(--text2);
     vertical-align: top;
   }
 
-  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .compare-table tr:hover td { background: rgba(0,0,0,0.03); }
 
   .compare-table td:first-child {
     font-weight: 600;
@@ -407,10 +407,10 @@
     margin-bottom: 1.2rem;
   }
 
-  .cat-conceptual { background: rgba(0,200,255,0.1); color: var(--accent); border: 1px solid rgba(0,200,255,0.2); }
-  .cat-technical { background: rgba(123,92,255,0.1); color: var(--accent2); border: 1px solid rgba(123,92,255,0.2); }
-  .cat-architecture { background: rgba(0,255,179,0.1); color: var(--accent3); border: 1px solid rgba(0,255,179,0.2); }
-  .cat-advanced { background: rgba(255,107,53,0.1); color: var(--accent4); border: 1px solid rgba(255,107,53,0.2); }
+  .cat-conceptual { background: rgba(0,119,182,0.1); color: var(--accent); border: 1px solid rgba(0,119,182,0.2); }
+  .cat-technical { background: rgba(107,76,255,0.1); color: var(--accent2); border: 1px solid rgba(107,76,255,0.2); }
+  .cat-architecture { background: rgba(5,150,105,0.1); color: var(--accent3); border: 1px solid rgba(5,150,105,0.2); }
+  .cat-advanced { background: rgba(232,93,4,0.1); color: var(--accent4); border: 1px solid rgba(232,93,4,0.2); }
 
   .q-accordion {
     display: flex;
@@ -462,7 +462,7 @@
   }
 
   .q-item.open .q-chevron { transform: rotate(180deg); color: var(--accent); }
-  .q-item.open { border-color: rgba(0,200,255,0.2); }
+  .q-item.open { border-color: rgba(0,119,182,0.2); }
 
   .q-answer {
     max-height: 0;
@@ -488,8 +488,8 @@
   .q-answer-inner code {
     font-family: 'Space Mono', monospace;
     font-size: 0.8rem;
-    background: rgba(0,200,255,0.07);
-    border: 1px solid rgba(0,200,255,0.15);
+    background: rgba(0,119,182,0.07);
+    border: 1px solid rgba(0,119,182,0.15);
     padding: 0.1rem 0.4rem;
     border-radius: 4px;
     color: var(--accent);
@@ -504,7 +504,7 @@
 
   .q-tip {
     margin-top: 0.8rem;
-    background: rgba(0,255,179,0.05);
+    background: rgba(5,150,105,0.05);
     border-left: 3px solid var(--accent3);
     padding: 0.7rem 1rem;
     border-radius: 0 6px 6px 0;
@@ -514,7 +514,7 @@
 
   /* ── CODE BLOCKS ── */
   pre {
-    background: #080c18;
+    background: #f8f9fa;
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1.2rem;
@@ -522,14 +522,14 @@
     font-family: 'Space Mono', monospace;
     font-size: 0.75rem;
     line-height: 1.7;
-    color: #b0c4de;
+    color: #212529;
     margin: 0.8rem 0;
   }
 
-  .kw { color: #7b5cff; }
-  .str { color: #00ffb3; }
-  .cm { color: #4a5a78; font-style: italic; }
-  .fn { color: #00c8ff; }
+  .kw { color: #6b4cff; }
+  .str { color: #059669; }
+  .cm { color: #6c757d; font-style: italic; }
+  .fn { color: #0077b6; }
   .num { color: #ff6b35; }
 
   /* ── DEPLOYMENT MODES ── */
@@ -573,9 +573,9 @@
     margin-bottom: 1rem;
   }
 
-  .mode-cluster .mode-icon { background: rgba(0,200,255,0.1); }
-  .mode-serverless .mode-icon { background: rgba(123,92,255,0.1); }
-  .mode-gke .mode-icon { background: rgba(0,255,179,0.1); }
+  .mode-cluster .mode-icon { background: rgba(0,119,182,0.1); }
+  .mode-serverless .mode-icon { background: rgba(107,76,255,0.1); }
+  .mode-gke .mode-icon { background: rgba(5,150,105,0.1); }
 
   .mode-card h3 { margin-bottom: 0.5rem; }
 
@@ -651,8 +651,8 @@
     padding: 1.4rem;
   }
 
-  .use-yes { border: 1px solid rgba(0,255,179,0.2); }
-  .use-no { border: 1px solid rgba(255,107,53,0.2); }
+  .use-yes { border: 1px solid rgba(5,150,105,0.2); }
+  .use-no { border: 1px solid rgba(232,93,4,0.2); }
 
   .use-heading {
     font-family: 'Syne', sans-serif;
@@ -770,10 +770,10 @@
   }
 
   .fs-cheatsheet {
-    --green: #00e5a0;
-    --yellow: #fbbf24;
-    --muted: #64748b;
-    --code-bg: #0d1526;
+    --green: #059669;
+    --yellow: #f59e0b;
+    --muted: #6c757d;
+    --code-bg: #f8f9fa;
   }
 
   
@@ -1035,7 +1035,7 @@
   .ic-list { background: rgba(0,212,255,0.15); color: var(--accent); }
   .ic-write { background: rgba(0,229,160,0.15); color: var(--green); }
   .ic-read { background: rgba(251,191,36,0.15); color: var(--yellow); }
-  .ic-move { background: rgba(255,107,53,0.15); color: var(--accent2); }
+  .ic-move { background: rgba(232,93,4,0.15); color: var(--accent2); }
   .ic-delete { background: rgba(239,68,68,0.15); color: #f87171; }
   .ic-info { background: rgba(124,58,237,0.15); color: #a78bfa; }
 
@@ -1047,7 +1047,7 @@
 
 <nav>
   <div style="display: flex; align-items: center; gap: 15px;">
-    <a href="javascript:history.back()" style="color: var(--accent); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,200,255,0.1); border: 1px solid rgba(0,200,255,0.2); transition: all 0.2s;" title="Back to Previous Page" onmouseover="this.style.background='var(--accent)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(0,200,255,0.1)'; this.style.color='var(--accent)';">
+    <a href="javascript:history.back()" style="color: var(--accent); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,119,182,0.1); border: 1px solid rgba(0,119,182,0.2); transition: all 0.2s;" title="Back to Previous Page" onmouseover="this.style.background='var(--accent)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(0,119,182,0.1)'; this.style.color='var(--accent)';">
       &#8592;
     </a>
     <a href="index.html" style="display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: #d4af37; letter-spacing: 1px; border: 2px solid #d4af37; border-radius: 50%; width: 36px; height: 36px; text-decoration: none; transition: all 0.2s;" title="Home" onmouseover="this.style.backgroundColor='#d4af37'; this.style.color='#111827';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#d4af37';">AR</a>
@@ -1291,7 +1291,7 @@
         <line x1="597" y1="410" x2="622" y2="455" stroke="#ffcc00" stroke-width="1" stroke-dasharray="4,2"/>
 
         <!-- Lightning Engine badge -->
-        <rect x="390" y="148" width="110" height="22" rx="11" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="1"/>
+        <rect x="390" y="148" width="110" height="22" rx="11" fill="rgba(0,119,182,0.15)" stroke="#00c8ff" stroke-width="1"/>
         <text x="445" y="163" text-anchor="middle" fill="#00c8ff" font-size="8.5" font-weight="700">⚡ Lightning Engine</text>
 
         <!-- Legend -->
@@ -1313,7 +1313,7 @@
       </svg>
     </div>
 
-    <div class="card" style="margin-top:1rem; background: rgba(0,200,255,0.04); border-color: rgba(0,200,255,0.15);">
+    <div class="card" style="margin-top:1rem; background: rgba(0,119,182,0.04); border-color: rgba(0,119,182,0.15);">
       <h3 style="color:var(--accent); font-size:0.9rem; margin-bottom:0.6rem;">🏗️ Key Architecture Principle</h3>
       <p style="font-size:0.85rem; color:var(--text2);">
         Dataproc <strong style="color:var(--text)">decouples compute from storage</strong>. Data lives permanently in <strong style="color:var(--accent)">GCS</strong>, not on the cluster's local HDFS. This means you can create ephemeral clusters, run jobs, and delete the cluster — your data is always safe. This is the single most important architectural distinction from on-prem Hadoop.

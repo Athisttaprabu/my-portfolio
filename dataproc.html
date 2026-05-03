@@ -59,24 +59,34 @@
 
   .nav-brand {
     font-family: 'Inter', sans-serif;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--accent);
+    white-space: nowrap;
   }
 
   .nav-links {
     display: flex;
-    gap: 15px;
+    gap: 8px;
     list-style: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .nav-links::-webkit-scrollbar {
+    display: none;
   }
 
   .nav-links a {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--text);
     text-decoration: none;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 20px;
+    white-space: nowrap;
     transition: all 0.3s ease;
   }
 

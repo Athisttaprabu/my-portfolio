@@ -7,10 +7,27 @@
     <title>Dataflow | Athisttaprabu Ramalingam</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
+        .coming-soon-content h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .coming-soon-content h1 span.hl {
+            background: linear-gradient(135deg, #00c8ff 0%, #7b5cff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .coming-soon-container {
             display: flex;
             flex-direction: column;
@@ -58,8 +75,8 @@
     <main>
         <div class="coming-soon-container">
             <div class="coming-soon-content">
-                <i class="fas fa-tools" style="font-size: 5rem; color: var(--accent); margin-bottom: 30px;"></i>
-                <h1>Dataflow</h1>
+                <i class="fas fa-tools" style="font-size: 5rem; color: #00c8ff; margin-bottom: 30px;"></i>
+                <h1>Google Cloud <span class="hl">Dataflow</span><br>Interview Mastery</h1>
                 <p>This article is currently being written. Stay tuned!</p>
             </div>
         </div>

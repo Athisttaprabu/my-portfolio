@@ -138,11 +138,38 @@
   .card h4 { font-family: 'Inter', sans-serif; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
   .card p { font-size: 13px; margin-bottom: 0; }
 
+  /* Pricing Tier Cards */
+  .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+  @media(max-width: 900px) { .tier-grid { grid-template-columns: 1fr; } }
+  .tier-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
+  .tier-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+  .tier-card.highlight { border-color: var(--accent); background: rgba(0, 119, 182, 0.02); box-shadow: 0 4px 12px rgba(0, 119, 182, 0.08); }
+  .tier-name { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .tier-price { font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+  .tier-price .unit { font-size: 12px; color: var(--text3); font-weight: 400; margin-left: 2px; }
+  .tier-feature { font-size: 13.5px; color: var(--text2); padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; }
+  .tier-feature:last-child { border-bottom: none; }
+  .tier-feature .check { color: var(--accent3); margin-right: 10px; font-weight: 900; }
+  .tier-feature .cross { color: #ea4335; margin-right: 10px; font-weight: 900; }
+
   /* Tables */
   .tbl-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; }
   table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
   th { background: #f8f9fa; padding: 12px 16px; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; color: var(--text3); border-bottom: 2px solid var(--border); }
   td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+
+  /* Tags */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag-green { background: rgba(5, 150, 105, 0.1); color: var(--accent3); }
+  .tag-blue { background: rgba(0, 119, 182, 0.1); color: var(--accent); }
+  .tag-yellow { background: rgba(232, 93, 4, 0.1); color: var(--accent4); }
+  .tag-purple { background: rgba(107, 76, 255, 0.1); color: var(--accent2); }
 
   /* Code Blocks */
   .code-block { background: #1e1e1e; border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }

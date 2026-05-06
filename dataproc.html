@@ -43,18 +43,31 @@
 
 
   /* ── NAV ── */
-  nav {
+  header {
     position: fixed;
     top: 0; left: 0; right: 0;
-    z-index: 100;
+    z-index: 1000;
     background: rgba(255,255,255,0.92);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
+    height: 56px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 56px;
+    padding: 0 1.5rem;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+    z-index: 900;
+    transition: transform 0.3s ease;
   }
 
   .nav-brand {
@@ -67,32 +80,30 @@
 
   .nav-links {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 0.5rem;
     list-style: none;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .nav-links::-webkit-scrollbar {
-    display: none;
   }
 
   .nav-links a {
+    display: block;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text);
+    color: var(--text2);
     text-decoration: none;
-    padding: 6px 10px;
-    border-radius: 20px;
-    white-space: nowrap;
-    transition: all 0.3s ease;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
   }
 
   .nav-links a:hover {
-    color: #d4af37;
-    background-color: rgba(212, 175, 55, 0.1);
+    color: var(--accent);
+    background: rgba(0, 119, 182, 0.05);
+  }
+
+  .nav-links a.active {
+    color: var(--accent);
+    background: rgba(0, 119, 182, 0.1);
   }
 
   /* ── MAIN LAYOUT ── */
@@ -100,8 +111,21 @@
     position: relative;
     z-index: 1;
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 2rem 4rem;
+    margin-left: 260px;
+    padding: 40px 3rem 4rem;
+  }
+
+  @media (max-width: 992px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+    main {
+      margin-left: 0;
+      padding: 40px 1.5rem 4rem;
+    }
+    header {
+      justify-content: space-between;
+    }
   }
 
   /* ── HERO ── */
@@ -1612,7 +1636,7 @@
 
 <div class="progress-bar" id="progress"></div>
 
-<nav>
+<header>
   <div style="display: flex; align-items: center; gap: 15px;">
     <a href="javascript:history.back()" style="color: var(--accent); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,119,182,0.1); border: 1px solid rgba(0,119,182,0.2); transition: all 0.2s;" title="Back to Previous Page" onmouseover="this.style.background='var(--accent)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(0,119,182,0.1)'; this.style.color='var(--accent)';">
       &#8592;
@@ -1620,6 +1644,9 @@
     <a href="index.html" style="display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700; color: #d4af37; letter-spacing: 1px; border: 2px solid #d4af37; border-radius: 50%; width: 36px; height: 36px; text-decoration: none; transition: all 0.2s;" title="Home" onmouseover="this.style.backgroundColor='#d4af37'; this.style.color='#111827';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#d4af37';">AR</a>
     <div class="nav-brand">⚡ Dataproc Interview Prep</div>
   </div>
+</header>
+
+<nav class="sidebar">
   <ul class="nav-links">
     <li><a href="#overview">Overview</a></li>
     <li><a href="#architecture">Architecture</a></li>

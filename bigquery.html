@@ -1,115 +1,1378 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BigQuery | Athisttaprabu Ramalingam</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .coming-soon-content h1 {
-            font-family: 'Inter', sans-serif;
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            color: #fff;
-            margin-bottom: 20px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GCP BigQuery — Lead & Principal Data Engineer Reference Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --bg2: #ffffff;
+    --bg3: #e9ecef;
+    --surface: #ffffff;
+    --surface2: #f8f9fa;
+    --border: #dee2e6;
+    --accent: #0077b6;
+    --accent2: #6b4cff;
+    --accent3: #059669;
+    --accent4: #e85d04;
+    --text: #212529;
+    --text2: #495057;
+    --text3: #6c757d;
+  }
 
-        .coming-soon-content h1 span.hl {
-            background: linear-gradient(135deg, #00c8ff 0%, #7b5cff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
 
-        .coming-soon-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            background: radial-gradient(circle at top right, #e9ecef 0%, var(--bg-dark) 50%);
-        }
+  /* ── NAV ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    height: 56px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+  }
 
-        .coming-soon-content h1 {
-            font-size: 4rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
+  .sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    overflow-y: auto;
+    z-index: 900;
+  }
 
-        .coming-soon-content p {
-            font-size: 1.5rem;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-        }
-    </style>
+  .nav-brand {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text2);
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent);
+    background: rgba(0, 119, 182, 0.05);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin-left: 260px;
+    padding: 40px 3rem 4rem;
+  }
+
+  @media (max-width: 992px) {
+    .sidebar { display: none; }
+    main { margin-left: 0; padding: 40px 1.5rem 4rem; }
+  }
+
+  /* ── CONTENT STYLES (Light Theme Adaptation) ── */
+  .section { margin-bottom: 60px; scroll-margin-top: 80px; }
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(0, 119, 182, 0.07);
+    border: 1px solid rgba(0, 119, 182, 0.2);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  h2 { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+  h3 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); margin: 32px 0 16px; }
+  h3.sub { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  
+  p { color: var(--text2); margin-bottom: 16px; font-size: 15px; }
+  strong { color: var(--text); font-weight: 600; }
+
+  /* Cards */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.3s ease; }
+  .card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+  .card h4 { font-family: 'Inter', sans-serif; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+  .card p { font-size: 13px; margin-bottom: 0; }
+
+  /* Tables */
+  .tbl-wrap { overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+  th { background: #f8f9fa; padding: 12px 16px; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; color: var(--text3); border-bottom: 2px solid var(--border); }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; }
+
+  /* Code Blocks */
+  .code-block { background: #1e1e1e; border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+  .code-header { background: #2d2d2d; padding: 8px 16px; display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #aaa; }
+  pre { padding: 1.5rem; overflow-x: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #d4d4d4; }
+  .kw { color: #569cd6; } .str { color: #ce9178; } .cmt { color: #6a9955; font-style: italic; }
+
+  /* Callouts */
+  .callout { padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid; }
+  .callout-title { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .callout-info { background: rgba(0, 119, 182, 0.05); border-color: var(--accent); color: var(--text); }
+  .callout-info .callout-title { color: var(--accent); }
+  .callout-tip { background: rgba(5, 150, 105, 0.05); border-color: var(--accent3); color: var(--text); }
+  .callout-tip .callout-title { color: var(--accent3); }
+
+  /* Diagram Styles */
+  .arch-diagram { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin: 2rem 0; }
+  .arch-row { display: flex; align-items: center; justify-content: center; margin: 10px 0; }
+  .arch-box { padding: 12px 20px; border: 1px solid var(--border); border-radius: 8px; text-align: center; min-width: 150px; background: #fdfdfd; }
+  .arch-label { display: block; font-weight: 700; font-size: 13px; }
+  .arch-sub { display: block; font-size: 10px; color: var(--text3); font-family: 'IBM Plex Mono', monospace; }
+  .arch-box.blue { border-color: var(--accent); background: rgba(0, 119, 182, 0.03); }
+  .arch-box.purple { border-color: var(--accent2); background: rgba(107, 76, 255, 0.03); }
+  .arch-box.yellow { border-color: var(--google-yellow); background: rgba(251, 188, 5, 0.03); }
+  .arch-box.green { border-color: var(--accent3); background: rgba(5, 150, 105, 0.03); }
+  .arch-arrow { color: var(--text3); font-size: 20px; padding: 0 10px; }
+
+  footer { background: #fff; border-top: 1px solid var(--border); padding: 3rem 2rem; text-align: center; margin-left: 260px; }
+  @media (max-width: 992px) { footer { margin-left: 0; } }
+
+  .divider { height: 1px; background: var(--border); margin: 3rem 0; border: none; }
+</style>
 </head>
-
 <body>
-    <header>
-        <nav class="container" style="display: flex; align-items: center; justify-content: flex-start; gap: 40px;">
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <a href="javascript:history.back()" class="back-btn-header" title="Back to Previous Page"><i class="fas fa-arrow-left"></i></a>
-                <a href="index.html" class="logo">AR</a>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html#about">About</a></li>
-                <li><a href="index.html#skills">Skills</a></li>
-                <li><a href="index.html#projects">Projects</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-                <li><a href="#" id="tech-articles-btn">Tech Articles</a></li>
-            </ul>
-            <div class="menu-toggle" id="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-        </nav>
-    </header>
 
-    <main>
-        <div class="coming-soon-container">
-            <div class="coming-soon-content">
-                <i class="fas fa-tools" style="font-size: 5rem; color: #00c8ff; margin-bottom: 30px;"></i>
-                <h1>Google Cloud <span class="hl">BigQuery</span><br>Interview Mastery</h1>
-                <p>This article is currently being written. Stay tuned!</p>
-            </div>
-        </div>
-    </main>
+<header>
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <a href="javascript:history.back()" style="color: var(--accent); text-decoration: none; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,119,182,0.1); border: 1px solid rgba(0,119,182,0.2); transition: all 0.2s;" title="Back to Previous Page" onmouseover="this.style.background='var(--accent)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(0,119,182,0.1)'; this.style.color='var(--accent)';">
+      &#8592;
+    </a>
+    <a href="index.html" style="display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700; color: #d4af37; letter-spacing: 1px; border: 2px solid #d4af37; border-radius: 50%; width: 36px; height: 36px; text-decoration: none; transition: all 0.2s;" title="Home" onmouseover="this.style.backgroundColor='#d4af37'; this.style.color='#111827';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='#d4af37';">AR</a>
+    <div class="nav-brand">⚡ BigQuery Reference Guide</div>
+  </div>
+</header>
 
-    <!-- Tech Articles Modal -->
-    <div id="tech-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3>Tech Articles Categories</h3>
-            <div class="tech-list" style="margin-bottom: 20px;">
-                <a href="aws-gcp-cheat-sheet.html" class="tech-tag">AWS ↔ GCP Cheat Sheet</a>
-                <a href="gen-ai-articles.html" class="tech-tag">Gen AI</a>
-                <a href="coming-soon.html" class="tech-tag">Python</a>
-                <a href="coming-soon.html" class="tech-tag">Pyspark</a>
-                <a href="aws-gcp-cheat-sheet.html" class="tech-tag">AWS</a>
-                <a href="coming-soon.html" class="tech-tag">Cloud Migration</a>
-                <a href="coming-soon.html" class="tech-tag">SQL</a>
-                <a href="coming-soon.html" class="tech-tag">Teradata</a>
-            </div>
-            <h3>GCP</h3>
-            <div class="tech-list">
-                <a href="dataproc.html" class="tech-tag">Dataproc</a>
-                <a href="bigquery.html" class="tech-tag">Bigquery</a>
-                <a href="dataflow.html" class="tech-tag">Dataflow</a>
-                <a href="managed-airflow.html" class="tech-tag">Managed Airflow</a>
-                <a href="vertex-ai.html" class="tech-tag">Vertex AI</a>
-                <a href="gcs.html" class="tech-tag">GCS</a>
-            </div>
-        </div>
+<nav class="sidebar">
+  <ul class="nav-links">
+    <li><a href="#s1">Architecture</a></li>
+    <li><a href="#s2">Pricing & Costs</a></li>
+    <li><a href="#s3">Ingress & Egress</a></li>
+    <li><a href="#s4">IAM & Access Control</a></li>
+    <li><a href="#s5">RAG in BigQuery</a></li>
+    <li><a href="#s6">Troubleshooting</a></li>
+    <li><a href="#s7">System Tables</a></li>
+    <li><a href="#s8">Performance Queries</a></li>
+
+  </ul>
+</nav>
+
+<main>
+
+
+<!-- ═════════════════════════════════════ 1. ARCHITECTURE -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div>
+      <h2>BigQuery Architecture</h2>
+      <p>Serverless, distributed data warehouse based on Google's internal infrastructure</p>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+  <h3 class="sub">Core Architectural Principle</h3>
+  <p>BigQuery is a <strong>fully managed, serverless data warehouse</strong> built on the strict separation of storage and compute layers. This decoupled architecture allows each layer to scale independently and dynamically without impacting the performance or availability of the other. No servers, clusters, or virtual machines need to be provisioned by users.</p>
+
+  <!-- Architecture Diagram -->
+  <div class="arch-diagram">
+    <div style="text-align:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-muted); letter-spacing:0.08em; margin-bottom:20px;">BIGQUERY ARCHITECTURE STACK</div>
+    <div class="arch-row">
+      <div class="arch-box blue"><span class="arch-label">SQL / API / SDK</span><span class="arch-sub">Client Interface</span></div>
+    </div>
+    <div class="arch-row"><div class="arch-arrow">↓</div></div>
+    <div class="arch-row">
+      <div class="arch-box purple"><span class="arch-label">Borg</span><span class="arch-sub">Cluster Manager</span></div>
+    </div>
+    <div class="arch-row"><div class="arch-arrow">↓</div></div>
+    <div class="arch-row">
+      <div class="arch-box yellow"><span class="arch-label">Dremel</span><span class="arch-sub">Query Engine</span></div>
+      <div class="arch-arrow">⟷</div>
+      <div class="arch-box green"><span class="arch-label">Jupiter</span><span class="arch-sub">Petabit Network</span></div>
+    </div>
+    <div class="arch-row"><div class="arch-arrow">↓</div></div>
+    <div class="arch-row">
+      <div class="arch-box blue"><span class="arch-label">Colossus</span><span class="arch-sub">Distributed Storage</span></div>
+    </div>
+    <div class="arch-label-row">
+      <span class="arch-layer-label" style="color:var(--accent)">COMPUTE LAYER</span>
+      <span class="arch-layer-label" style="color:var(--accent2)">NETWORK</span>
+      <span class="arch-layer-label" style="color:var(--accent3)">STORAGE LAYER</span>
+    </div>
+  </div>
+
+  <h3>Core Infrastructure Components</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🗄️</div>
+      <h4>Colossus — Distributed Storage</h4>
+      <p>Google's next-gen distributed file system. Stores data in <strong>columnar format called Capacitor</strong>. Each column is stored in a separate file, enabling high compression ratios and fast scan throughput. Automatically replicates across multiple locations (11 nines durability). Supports logical and physical (compressed) billing.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚙️</div>
+      <h4>Dremel — Query Engine</h4>
+      <p>BigQuery's massively parallel analytical query engine. Uses a <strong>tree architecture</strong> to dispatch queries and aggregate results, allowing it to scan trillions of rows in seconds. Splits work across thousands of slots simultaneously. Executes queries entirely in memory. All data passes between stages via shuffle memory.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h4>Jupiter — Petabit Network</h4>
+      <p>Google's ultra-fast internal network providing <strong>1 Petabit/sec of total bisection bandwidth</strong>. Delivers terabytes of data from Colossus to Dremel in seconds. Essential because the separation of compute and storage requires extremely fast data transfer between layers.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h4>Borg — Cluster Manager</h4>
+      <p>Google's large-scale cluster management system. Runs <strong>thousands of Dremel jobs simultaneously</strong> across clusters of tens of thousands of machines. Handles automatic fault-tolerance, resource allocation, and job scheduling for all BigQuery workloads.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📦</div>
+      <h4>Capacitor — Columnar Format</h4>
+      <p>BigQuery's proprietary columnar storage format (replaced ColumnIO in 2016). Enables BigQuery to <strong>operate directly on compressed data</strong> without decompressing on the fly. Provides run-length encoding and other compression techniques, achieving high compression ratios.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔀</div>
+      <h4>Slots — Compute Units</h4>
+      <p>A BigQuery slot is a <strong>virtual CPU used during query execution</strong>. BigQuery automatically calculates how many slots a query requires and schedules them accordingly. With on-demand pricing, up to 2,000 concurrent slots per project. Editions allow reserving and autoscaling slots.</p>
+    </div>
+  </div>
+
+  <h3>Key Architectural Properties</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Property</th><th>Description</th><th>Implication</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Serverless</strong></td><td>No provisioning of VMs, clusters, or nodes</td><td>Zero infrastructure management; auto-scales on demand</td></tr>
+        <tr><td><strong>Storage/Compute Separation</strong></td><td>Colossus (storage) and Dremel (compute) are fully decoupled</td><td>Scale each independently; pay for both separately</td></tr>
+        <tr><td><strong>Columnar Storage</strong></td><td>Capacitor format stores each column separately</td><td>Queries scan only relevant columns — cheaper and faster</td></tr>
+        <tr><td><strong>ACID Transactions</strong></td><td>Full ACID compliance including DML (INSERT/UPDATE/DELETE)</td><td>Supports transactional semantics on large datasets</td></tr>
+        <tr><td><strong>Multi-tenant</strong></td><td>Resources shared across Google's infrastructure fleet</td><td>Cost-effective; resources available on-demand</td></tr>
+        <tr><td><strong>Open Format Support</strong></td><td>Apache Iceberg, Delta Lake, Apache Hudi</td><td>Lakehouse architecture; avoid vendor lock-in</td></tr>
+        <tr><td><strong>Time Travel</strong></td><td>Query historical data up to 7 days (configurable)</td><td>Recover deleted/modified data; audit changes</td></tr>
+        <tr><td><strong>Fail-safe</strong></td><td>7-day additional retention window post time-travel</td><td>Data recovery safety net beyond time-travel window</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>BigQuery Editions (2023–Present)</h3>
+  <p>Google replaced the legacy flat-rate and flex slots model with <strong>BigQuery Editions</strong> in March 2023, providing three tiers with autoscaling and feature differentiation:</p>
+  <div class="tier-grid">
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--accent2)">Standard Edition</div>
+      <div class="tier-price">$0.04<span class="unit">/slot-hour</span></div>
+      <div class="tier-feature"><span class="check">✓</span>Basic analytics</div>
+      <div class="tier-feature"><span class="check">✓</span>Autoscaling</div>
+      <div class="tier-feature"><span class="check">✓</span>Cross-project slot sharing</div>
+      <div class="tier-feature"><span class="cross">✗</span>Row-level security</div>
+      <div class="tier-feature"><span class="cross">✗</span>Multi-statement transactions</div>
+      <div class="tier-feature"><span class="cross">✗</span>1-yr/3-yr commitments</div>
+    </div>
+    <div class="tier-card highlight">
+      <div class="tier-name" style="color:var(--accent)">Enterprise Edition</div>
+      <div class="tier-price">$0.06<span class="unit">/slot-hour</span></div>
+      <div class="tier-feature"><span class="check">✓</span>All Standard features</div>
+      <div class="tier-feature"><span class="check">✓</span>Row-level security</div>
+      <div class="tier-feature"><span class="check">✓</span>Multi-statement transactions</div>
+      <div class="tier-feature"><span class="check">✓</span>BI Engine (in-memory accel.)</div>
+      <div class="tier-feature"><span class="check">✓</span>1-yr commitment (~20% off)</div>
+      <div class="tier-feature"><span class="check">✓</span>3-yr commitment (~40% off)</div>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name" style="color:var(--accent5)">Enterprise Plus</div>
+      <div class="tier-price">$0.10<span class="unit">/slot-hour</span></div>
+      <div class="tier-feature"><span class="check">✓</span>All Enterprise features</div>
+      <div class="tier-feature"><span class="check">✓</span>Advanced security controls</div>
+      <div class="tier-feature"><span class="check">✓</span>Enhanced disaster recovery</div>
+      <div class="tier-feature"><span class="check">✓</span>Priority support SLA</div>
+      <div class="tier-feature"><span class="check">✓</span>Cross-region DR</div>
+      <div class="tier-feature"><span class="check">✓</span>1-yr &amp; 3-yr commitments</div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💡 Interview Key Point</div>
+    The separation of storage and compute is what makes BigQuery uniquely elastic. Ingesting petabytes doesn't require pre-allocating compute, and scaling compute for complex analytics doesn't require additional storage provisioning. This is fundamentally different from Redshift (node-based) or Snowflake (virtual warehouse sizing).
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═════════════════════════════════════ 2. PRICING -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div>
+      <h2>BigQuery Pricing & Cost Management</h2>
+      <p>Storage, compute, and edition-based capacity pricing models</p>
+    </div>
+  </div>
+
+  <h3>Two Independent Cost Dimensions</h3>
+  <p>BigQuery charges separately for <strong>storage</strong> and <strong>compute</strong>. They scale and bill independently.</p>
+
+  <h3>Storage Pricing</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Storage Type</th><th>Condition</th><th>Logical Price</th><th>Physical Price</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Active Storage</strong></td><td>Table/partition modified in last 90 days</td><td>~$0.02/GB/month</td><td>~$0.04/GB/month</td></tr>
+        <tr><td><strong>Long-Term Storage</strong></td><td>No modification for 90+ consecutive days (auto)</td><td>~$0.01/GB/month</td><td>~$0.02/GB/month</td></tr>
+        <tr><td><strong>Time Travel Storage</strong></td><td>Historical versions (0–7 days window)</td><td>Included in active rate (logical)</td><td>Charged at active rate (physical)</td></tr>
+        <tr><td><strong>Fail-safe Storage</strong></td><td>7-day safety window beyond time travel</td><td>Included (logical)</td><td>Charged at active rate (physical)</td></tr>
+        <tr><td><strong>Free Tier</strong></td><td>First 10 GiB/month</td><td colspan="2">Free</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">⚠️ Physical vs Logical Billing</div>
+    By default datasets use <strong>logical billing</strong> (uncompressed byte size). You can switch to <strong>physical billing</strong> (compressed actual bytes on disk), which can be 3–5x cheaper for well-compressible data — but time travel and fail-safe are then billed separately at active rates.
+  </div>
+
+  <h3>Compute Pricing Models</h3>
+
+  <h4 style="margin:16px 0 8px;color:var(--accent3);font-family:'IBM Plex Mono',monospace;font-size:13px;">MODEL 1: On-Demand (Default)</h4>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Item</th><th>Price</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Query processing</td><td><strong>$6.25 / TiB</strong> scanned</td><td>First 1 TiB/month free per billing account</td></tr>
+        <tr><td>Minimum billing</td><td>10 MB per query</td><td>Queries rounded up to nearest MB</td></tr>
+        <tr><td>Cached results</td><td>Free</td><td>Results cached for 24 hours (same query, same data)</td></tr>
+        <tr><td>Concurrent slots</td><td>Up to 2,000 shared</td><td>BigQuery may burst beyond temporarily for small queries</td></tr>
+        <tr><td>Dry run</td><td>Free</td><td>Estimate bytes processed before running</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4 style="margin:16px 0 8px;color:var(--accent3);font-family:'IBM Plex Mono',monospace;font-size:13px;">MODEL 2: Capacity Pricing (Editions)</h4>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Edition</th><th>Pay-as-you-go</th><th>1-Year Commit</th><th>3-Year Commit</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag tag-green">Standard</span></td><td>$0.04/slot-hour</td><td>N/A</td><td>N/A</td></tr>
+        <tr><td><span class="tag tag-blue">Enterprise</span></td><td>$0.06/slot-hour</td><td>~$0.048/slot-hr (~20% off)</td><td>~$0.036/slot-hr (~40% off)</td></tr>
+        <tr><td><span class="tag tag-purple">Enterprise Plus</span></td><td>$0.10/slot-hour</td><td>~$0.08/slot-hr (~20% off)</td><td>~$0.06/slot-hr (~40% off)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">💰 Break-Even Rule</div>
+    The break-even between on-demand and capacity pricing typically falls between <strong>300–500 TiB/month</strong> of processing. Below that threshold, on-demand is usually cheaper. Above it, reservations with autoscaling deliver both cost savings and predictability.
+  </div>
+
+  <h3>Cost Optimization Strategies</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Strategy</th><th>Impact</th><th>How</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Partitioning</strong></td><td><span class="tag tag-green">HIGH</span></td><td>Partition by date/business key; queries scan only matching partitions</td></tr>
+        <tr><td><strong>Clustering</strong></td><td><span class="tag tag-green">HIGH</span></td><td>Cluster on high-cardinality filter columns; BigQuery prunes blocks automatically</td></tr>
+        <tr><td><strong>Column selection</strong></td><td><span class="tag tag-yellow">MED</span></td><td>Never <code>SELECT *</code>; select only needed columns (BigQuery charges per column scanned)</td></tr>
+        <tr><td><strong>Materialized Views</strong></td><td><span class="tag tag-yellow">MED</span></td><td>Pre-aggregate frequent queries; cached results served without full scan</td></tr>
+        <tr><td><strong>BI Engine</strong></td><td><span class="tag tag-yellow">MED</span></td><td>In-memory cache for repeated BI queries; included in Enterprise/Enterprise+ editions</td></tr>
+        <tr><td><strong>Dry Run</strong></td><td><span class="tag tag-blue">MONITORING</span></td><td>Use <code>--dry_run</code> flag to estimate bytes before running expensive queries</td></tr>
+        <tr><td><strong>Custom Quotas</strong></td><td><span class="tag tag-blue">CONTROL</span></td><td>Set daily per-project or per-user processing quotas to cap spend</td></tr>
+        <tr><td><strong>Long-Term Storage</strong></td><td><span class="tag tag-green">HIGH</span></td><td>Leave historical tables unmodified; cost drops 50% automatically after 90 days</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Dry Run Estimate — CLI</span></div>
+    <pre><code><span class="cmt">-- Estimate bytes without running the query (free)</span>
+<span class="cmt">-- CLI:</span>
+bq query --dry_run --use_legacy_sql=<span class="str">false</span> <span class="str">'SELECT * FROM dataset.large_table WHERE date = "2025-01-01"'</span>
+<span class="cmt">-- Returns: "Query successfully validated. Assuming the tables are not modified, running this query will process X bytes of data."</span>
+
+<span class="cmt">-- API: set dryRun: true in jobs.insert request</span>
+
+<span class="cmt">-- Check slot utilization over last 7 days</span>
+<span class="kw">SELECT</span>
+  <span class="fn">DATE</span>(creation_time) <span class="kw">AS</span> day,
+  <span class="fn">SUM</span>(total_slot_ms) / <span class="num">1000</span> / <span class="num">3600</span> <span class="kw">AS</span> total_slot_hours,
+  <span class="fn">AVG</span>(total_slot_ms) / <span class="num">1000</span> <span class="kw">AS</span> avg_slot_seconds_per_query
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+<span class="kw">WHERE</span> creation_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">7</span> <span class="kw">DAY</span>)
+  <span class="kw">AND</span> job_type = <span class="str">'QUERY'</span>
+  <span class="kw">AND</span> state = <span class="str">'DONE'</span>
+<span class="kw">GROUP BY</span> day
+<span class="kw">ORDER BY</span> day <span class="kw">DESC</span>;</code></pre>
+  </div>
+
+  <h3>Additional Service Costs</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Service</th><th>Cost</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Streaming Inserts (Legacy API)</td><td>$0.01 / 200 MB</td><td>Use Storage Write API instead (has free monthly allowance)</td></tr>
+        <tr><td>Storage Read API (ReadRows)</td><td>$1.10 / TiB</td><td>For high-throughput analytical reads via BI tools</td></tr>
+        <tr><td>BigQuery ML training</td><td>Per-TiB on top of compute</td><td>Depends on model type</td></tr>
+        <tr><td>Data Transfer Service</td><td>Billed under BQ Services SKU</td><td>Varies by source/destination</td></tr>
+        <tr><td>Studio Notebooks</td><td>Pay-as-you-go Standard Edition slots</td><td>Colab Enterprise runtime; non-default runtime billed under Vertex SKUs</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═════════════════════════════════════ 3. INGRESS/EGRESS -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div>
+      <h2>Ingress & Egress Costs</h2>
+      <p>Data movement costs into and out of BigQuery</p>
+    </div>
+  </div>
+
+  <h3>Data Ingress (Loading Data INTO BigQuery)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Method</th><th>Cost</th><th>Use Case</th><th>Max Throughput</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Batch Load Jobs (GCS)</strong></td><td><span class="tag tag-green">FREE</span></td><td>Avro, Parquet, ORC, CSV, JSON, Datastore, Firestore exports</td><td>High (parallel)</td></tr>
+        <tr><td><strong>Storage Write API (new)</strong></td><td>Free monthly allowance, then per-byte</td><td>Low-latency streaming, exactly-once semantics</td><td>Very high</td></tr>
+        <tr><td><strong>Legacy Streaming API</strong></td><td>$0.01 / 200 MB</td><td>Real-time streaming (legacy; prefer Storage Write API)</td><td>High</td></tr>
+        <tr><td><strong>BigQuery Data Transfer Service</strong></td><td>BQ Services SKU rate</td><td>SaaS sources (Google Ads, YouTube, etc.)</td><td>Scheduled</td></tr>
+        <tr><td><strong>Dataflow → BigQuery</strong></td><td>Dataflow pricing (not BQ)</td><td>Complex ETL/ELT pipelines</td><td>Very high</td></tr>
+        <tr><td><strong>Cross-region Network Ingress</strong></td><td><span class="tag tag-green">FREE</span> (to GCP)</td><td>Transferring data INTO Google Cloud is free</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Data Egress (Data OUT of BigQuery)</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Scenario</th><th>Cost</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Export to GCS (same region)</td><td><span class="tag tag-green">FREE</span></td><td>Always export to GCS first, then move elsewhere</td></tr>
+        <tr><td>Export to GCS (cross-region)</td><td>Network egress charges apply</td><td>Use same-region GCS bucket when possible</td></tr>
+        <tr><td>Internet egress (external)</td><td>$0.12/GiB (1 GiB–1 TiB), $0.08/GiB (10+ TiB)</td><td>First 1 GiB/month free; high-cost regions up to $0.19/GiB</td></tr>
+        <tr><td>Cross-region replication</td><td>BQ Network Egress Replication SKU</td><td>Both standard and Turbo replication billed on physical bytes</td></tr>
+        <tr><td>BigQuery → Cloud Storage (different region)</td><td>Network egress applies</td><td><strong>Feb 2025</strong>: new fees for cross-region BQ+GCS access</td></tr>
+        <tr><td>External tables (Nearline/Coldline/Archive GCS)</td><td>GCS retrieval fees</td><td><strong>Feb 2025</strong>: retrieval fees for non-Standard storage classes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-danger">
+    <div class="callout-title">🚨 February 2025 Pricing Change</div>
+    Google introduced new retrieval and data transfer fees when BigQuery accesses Cloud Storage data from <strong>non-Standard storage classes</strong> (Nearline, Coldline, Archive). Also, cross-region access between BigQuery and Cloud Storage now incurs network fees. Same-region access remains free. <strong>Always co-locate your BigQuery dataset and GCS bucket in the same region.</strong>
+  </div>
+
+  <h3>Best Practices for Cost-Effective Data Movement</h3>
+  <ul class="feature-list">
+    <li>Always use batch load jobs from GCS instead of streaming when latency allows — batch is FREE</li>
+    <li>Prefer the new <strong>BigQuery Storage Write API</strong> over the legacy streaming API for lower cost with better semantics</li>
+    <li>Co-locate BigQuery datasets and GCS buckets in the <strong>same region</strong> to avoid cross-region egress fees</li>
+    <li>Export data to GCS before downloading externally — GCS egress is cheaper than BQ direct egress</li>
+    <li>For replication, understand that <strong>Turbo replication</strong> has a 0-minute RPO but higher cost than standard cross-region replication</li>
+    <li>Avoid reading from Nearline/Coldline GCS via external tables for frequent queries — promote data to Standard storage class or load into BQ native tables</li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═════════════════════════════════════ 4. IAM ACCESS CONTROL -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <div>
+      <h2>IAM Access Control</h2>
+      <p>Users, Groups, Service Accounts — roles, hierarchy, and best practices</p>
+    </div>
+  </div>
+
+  <h3>IAM Principals in BigQuery</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">👤</div>
+      <h4>User Account</h4>
+      <p>Individual Google account identified by email. Grants access for human users. Best practice: grant roles to groups rather than individual users for manageability and auditability.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">👥</div>
+      <h4>Google Group</h4>
+      <p>A Google Workspace or Cloud Identity group. Enables role-based access at scale. Adding/removing users from the group automatically adjusts their BigQuery permissions. <strong>Always prefer groups over individual users.</strong></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h4>Service Account</h4>
+      <p>A non-human identity used by applications, pipelines, and automation tools (Airflow, Dataflow, dbt, Spark). Each service/pipeline should have its own dedicated service account following least-privilege principle.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h4>allAuthenticatedUsers</h4>
+      <p>Special identifier granting access to all Google-authenticated users. Used only for public datasets. <strong>Never use for private production data.</strong></p>
+    </div>
+  </div>
+
+  <h3>IAM Resource Hierarchy</h3>
+  <div class="arch-diagram">
+    <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);margin-bottom:16px;">PERMISSION INHERITANCE FLOWS DOWNWARD</div>
+    <div class="arch-row">
+      <div class="arch-box purple"><span class="arch-label">Organization</span><span class="arch-sub">Top-level governance &amp; audit</span></div>
+    </div>
+    <div class="arch-row"><div class="arch-arrow">↓ inherits</div></div>
+    <div class="arch-row">
+      <div class="arch-box blue"><span class="arch-label">Folder</span><span class="arch-sub">Group projects by business unit / env</span></div>
+    </div>
+    <div class="arch-row"><div class="arch-arrow">↓ inherits</div></div>
+    <div class="arch-row">
+      <div class="arch-box yellow"><span class="arch-label">Project</span><span class="arch-sub">Billing, quotas, job execution</span></div>
+    </div>
+    <div class="arch-row"><div class="arch-arrow">↓ inherits</div></div>
+    <div class="arch-row">
+      <div class="arch-box green"><span class="arch-label">Dataset</span><span class="arch-sub">Data access boundary</span></div>
+    </div>
+    <div class="arch-row"><div class="arch-arrow">↓ inherits</div></div>
+    <div class="arch-row">
+      <div class="arch-box blue"><span class="arch-label">Table / View / Routine</span><span class="arch-sub">Fine-grained resource access</span></div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">⚠️ Critical Nuance</div>
+    To <strong>run a query</strong>, a user needs <code>bigquery.jobs.create</code> at the <strong>project level</strong>. To <strong>read data</strong>, they need at least <code>bigquery.dataViewer</code> at the <strong>dataset or table level</strong>. Both are required. A common issue is granting only dataset-level access but forgetting the project-level job execution permission.
+  </div>
+
+  <h3>Key Predefined Roles</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Role</th><th>Scope</th><th>Permissions Granted</th><th>Typical Principal</th></tr></thead>
+      <tbody>
+        <tr><td><code>roles/bigquery.admin</code></td><td>Project</td><td>Full control of all BQ resources including IAM</td><td>Platform Admin</td></tr>
+        <tr><td><code>roles/bigquery.dataOwner</code></td><td>Dataset/Table</td><td>Read, write, delete data + manage dataset IAM</td><td>Data Owner</td></tr>
+        <tr><td><code>roles/bigquery.dataEditor</code></td><td>Dataset/Table</td><td>Read &amp; write data, create tables, delete tables</td><td>ETL SA, dbt SA</td></tr>
+        <tr><td><code>roles/bigquery.dataViewer</code></td><td>Dataset/Table</td><td>Read data and table metadata only</td><td>Analyst group, BI tool SA</td></tr>
+        <tr><td><code>roles/bigquery.metadataViewer</code></td><td>Project</td><td>View dataset and table metadata (no data)</td><td>Data catalog tools</td></tr>
+        <tr><td><code>roles/bigquery.jobUser</code></td><td>Project</td><td><code>bigquery.jobs.create</code> only — run queries</td><td>Any user who needs to run jobs</td></tr>
+        <tr><td><code>roles/bigquery.user</code></td><td>Project</td><td>jobUser + list datasets + run jobs</td><td>Standard analyst users</td></tr>
+        <tr><td><code>roles/bigquery.readSessionUser</code></td><td>Project</td><td>Create read sessions via Storage Read API</td><td>Data science tools</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Recommended 2-Layer RBAC Pattern</h3>
+  <p>Google and best-practice guides recommend a <strong>2-layer Role-Based Access Control</strong> design: functional roles defined through Google Groups, with IAM predefined roles applied to groups (not individuals).</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Functional Group</th><th>BQ IAM Roles</th><th>Scope</th></tr></thead>
+      <tbody>
+        <tr><td><code>LOADER_ROLE</code> group</td><td>dataEditor (or dataOwner)</td><td>Raw data project dataset-level</td></tr>
+        <tr><td><code>ANALYTICS_ENGINEER_ROLE</code> group</td><td>dataEditor on dev/staging; dataViewer on raw</td><td>dbt dev project</td></tr>
+        <tr><td><code>ANALYST_ROLE</code> group</td><td>dataViewer + jobUser</td><td>Production datasets</td></tr>
+        <tr><td>Orchestrator Service Account (Airflow/dbt Cloud)</td><td>dataEditor + jobUser</td><td>Production datasets directly</td></tr>
+        <tr><td>BI Tool Service Account (Looker/Tableau)</td><td>dataViewer + jobUser</td><td>Production datasets</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Granting Access — SQL &amp; Console Methods</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL (DCL)</span><span>Dataset-level access via BigQuery DCL</span></div>
+    <pre><code><span class="cmt">-- Grant BigQuery Data Viewer to a user on a dataset</span>
+<span class="kw">GRANT</span> <span class="str">`roles/bigquery.dataViewer`</span> <span class="kw">ON</span> <span class="kw">SCHEMA</span> <span class="id">`myProject`</span>.myDataset
+  <span class="kw">TO</span> <span class="str">"user:alice@example.com"</span>;
+
+<span class="cmt">-- Grant to a Google Group</span>
+<span class="kw">GRANT</span> <span class="str">`roles/bigquery.dataEditor`</span> <span class="kw">ON</span> <span class="kw">SCHEMA</span> <span class="id">`myProject`</span>.rawDataset
+  <span class="kw">TO</span> <span class="str">"group:data-loaders@company.com"</span>;
+
+<span class="cmt">-- Grant to a Service Account</span>
+<span class="kw">GRANT</span> <span class="str">`roles/bigquery.dataEditor`</span> <span class="kw">ON</span> <span class="kw">SCHEMA</span> <span class="id">`myProject`</span>.prodDataset
+  <span class="kw">TO</span> <span class="str">"serviceAccount:dbt-sa@myproject.iam.gserviceaccount.com"</span>;
+
+<span class="cmt">-- Revoke access</span>
+<span class="kw">REVOKE</span> <span class="str">`roles/bigquery.dataViewer`</span> <span class="kw">ON</span> <span class="kw">SCHEMA</span> <span class="id">`myProject`</span>.myDataset
+  <span class="kw">FROM</span> <span class="str">"user:alice@example.com"</span>;
+
+<span class="cmt">-- Grant table-level access (fine-grained)</span>
+<span class="kw">GRANT</span> <span class="str">`roles/bigquery.dataViewer`</span> <span class="kw">ON</span> <span class="kw">TABLE</span> <span class="id">`myProject`</span>.myDataset.sensitive_table
+  <span class="kw">TO</span> <span class="str">"group:finance-analysts@company.com"</span>;</code></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">gcloud CLI</span><span>Project-level IAM via gcloud</span></div>
+    <pre><code><span class="cmt"># Grant bigquery.jobUser at project level (required to run jobs)</span>
+gcloud projects add-iam-policy-binding my-project \
+  --member=<span class="str">"group:analyst-team@company.com"</span> \
+  --role=<span class="str">"roles/bigquery.jobUser"</span>
+
+<span class="cmt"># Grant to a Service Account</span>
+gcloud projects add-iam-policy-binding my-project \
+  --member=<span class="str">"serviceAccount:airflow-sa@myproject.iam.gserviceaccount.com"</span> \
+  --role=<span class="str">"roles/bigquery.user"</span></code></pre>
+  </div>
+
+  <h3>Row-Level Security &amp; Column-Level Security</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Row-Level Security (RLS) — BigQuery Enterprise+</span></div>
+    <pre><code><span class="cmt">-- Create a row access policy: only show rows for user's region</span>
+<span class="kw">CREATE</span> <span class="kw">OR REPLACE</span> ROW ACCESS POLICY region_filter
+  <span class="kw">ON</span> myDataset.sales_table
+  <span class="kw">GRANT TO</span> (<span class="str">"group:us-analysts@company.com"</span>)
+  FILTER <span class="kw">USING</span> (region = <span class="str">'US'</span>);
+
+<span class="cmt">-- Admins bypass RLS (no filter applied)</span>
+<span class="kw">CREATE</span> <span class="kw">OR REPLACE</span> ROW ACCESS POLICY admin_bypass
+  <span class="kw">ON</span> myDataset.sales_table
+  <span class="kw">GRANT TO</span> (<span class="str">"group:data-admins@company.com"</span>)
+  FILTER <span class="kw">USING</span> (<span class="kw">TRUE</span>);
+
+<span class="cmt">-- Column-Level Security: use policy tags via Data Catalog</span>
+<span class="cmt">-- 1. Create taxonomy and policy tag in Data Catalog</span>
+<span class="cmt">-- 2. Attach policy tag to column in schema</span>
+<span class="cmt">-- 3. Grant roles/datacatalog.categoryFineGrainedReader to authorized principals</span>
+<span class="cmt">-- Unauthorized users get NULL for masked columns</span></code></pre>
+  </div>
+
+  <h3>Service Account Best Practices</h3>
+  <ul class="feature-list">
+    <li>Create <strong>one service account per workload</strong> (one for Airflow, one for dbt, one for Dataflow pipelines)</li>
+    <li>Never grant <code>roles/bigquery.admin</code> to a service account unless absolutely required</li>
+    <li>Use <strong>Workload Identity Federation</strong> for GKE workloads instead of downloading key files</li>
+    <li>Rotate service account keys regularly; prefer keyless authentication where possible</li>
+    <li>Audit service account usage via Cloud Audit Logs — look for <code>DATA_READ</code> and <code>DATA_WRITE</code> events</li>
+    <li>Use separate service accounts for dev/staging/prod environments — never share across environments</li>
+    <li>Apply IAM Conditions (e.g., time-based, resource-based) for temporary access grants</li>
+  </ul>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═════════════════════════════════════ 5. RAG -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <div>
+      <h2>Implementing RAG in BigQuery</h2>
+      <p>Retrieval-Augmented Generation using BigQuery Vector Search and Vertex AI</p>
+    </div>
+  </div>
+
+  <p>BigQuery launched vector search in early 2024 (GA in September 2024), enabling RAG workflows entirely within BigQuery without specialized vector databases. BigQuery stores embeddings as <strong>ARRAY&lt;FLOAT64&gt;</strong> columns and uses IVF (Inverted File Index) + ScaNN algorithm for approximate nearest-neighbor search at scale.</p>
+
+  <h3>RAG Architecture in BigQuery</h3>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(68,147,248,0.12);border:1px solid rgba(68,147,248,0.3)">📄</div>
+      <strong>Documents / Data</strong>
+      <p>GCS, PDFs, structured tables, web content</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(227,179,65,0.12);border:1px solid rgba(227,179,65,0.3)">✂️</div>
+      <strong>Chunk &amp; Parse</strong>
+      <p>Split into semantic chunks (LangChain, Python, BQ DataFrames)</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(63,185,80,0.12);border:1px solid rgba(63,185,80,0.3)">🔢</div>
+      <strong>Generate Embeddings</strong>
+      <p>ML.GENERATE_EMBEDDING() via Vertex AI text-embedding model</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(188,140,255,0.12);border:1px solid rgba(188,140,255,0.3)">🗄️</div>
+      <strong>Store in BigQuery</strong>
+      <p>ARRAY&lt;FLOAT64&gt; column; create vector index</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(247,129,102,0.12);border:1px solid rgba(247,129,102,0.3)">🔍</div>
+      <strong>Vector Search</strong>
+      <p>VECTOR_SEARCH() finds top-K similar chunks</p>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon" style="background:rgba(68,147,248,0.12);border:1px solid rgba(68,147,248,0.3)">🤖</div>
+      <strong>Generate Answer</strong>
+      <p>ML.GENERATE_TEXT() with Gemini + retrieved context</p>
+    </div>
+  </div>
+
+  <h3>Step 1: Set Up External Connection to Vertex AI</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Create Remote Model Connection</span></div>
+    <pre><code><span class="cmt">-- Step 1: Create a BigQuery Connection to Vertex AI (via Cloud Console or bq CLI)</span>
+<span class="cmt">-- bq mk --connection --location=US --project_id=myproject \</span>
+<span class="cmt">--     --connection_type=CLOUD_RESOURCE vertex-ai-conn</span>
+
+<span class="cmt">-- Step 2: Create remote embedding model in BigQuery</span>
+<span class="kw">CREATE OR REPLACE MODEL</span> myDataset.embedding_model
+  REMOTE <span class="kw">WITH CONNECTION</span> <span class="id">`us.vertex-ai-conn`</span>
+  OPTIONS (
+    ENDPOINT = <span class="str">'text-embedding-005'</span>  <span class="cmt">-- or 'text-multilingual-embedding-002'</span>
+  );
+
+<span class="cmt">-- Step 3: Create remote text generation model (for the Generation step)</span>
+<span class="kw">CREATE OR REPLACE MODEL</span> myDataset.gemini_model
+  REMOTE <span class="kw">WITH CONNECTION</span> <span class="id">`us.vertex-ai-conn`</span>
+  OPTIONS (
+    ENDPOINT = <span class="str">'gemini-2.0-flash-001'</span>
+  );</code></pre>
+  </div>
+
+  <h3>Step 2: Create Embeddings Table &amp; Generate Embeddings</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Generate and Store Embeddings</span></div>
+    <pre><code><span class="cmt">-- Assume we have a table: knowledge_base(doc_id STRING, chunk_text STRING, metadata STRING)</span>
+
+<span class="cmt">-- Create embeddings and store in a new table</span>
+<span class="kw">CREATE OR REPLACE TABLE</span> myDataset.knowledge_embeddings <span class="kw">AS</span>
+<span class="kw">SELECT</span>
+  doc_id,
+  chunk_text,
+  metadata,
+  ml_generate_embedding_result <span class="kw">AS</span> embedding  <span class="cmt">-- ARRAY&lt;FLOAT64&gt;</span>
+<span class="kw">FROM</span>
+  ML.GENERATE_EMBEDDING(
+    <span class="kw">MODEL</span> myDataset.embedding_model,
+    <span class="kw">TABLE</span> myDataset.knowledge_base,
+    <span class="kw">STRUCT</span>(<span class="str">'RETRIEVAL_DOCUMENT'</span> <span class="kw">AS</span> task_type, <span class="num">768</span> <span class="kw">AS</span> output_dimensionality)
+  );
+
+<span class="cmt">-- Create a vector index for fast approximate nearest-neighbor search</span>
+<span class="kw">CREATE OR REPLACE VECTOR INDEX</span> embedding_idx
+  <span class="kw">ON</span> myDataset.knowledge_embeddings(embedding)
+  OPTIONS (
+    index_type = <span class="str">'IVF'</span>,
+    distance_type = <span class="str">'COSINE'</span>,
+    ivf_options = <span class="str">'{"num_lists": 500}'</span>
+  );</code></pre>
+  </div>
+
+  <h3>Step 3: Vector Search — Retrieval</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>RAG — Retrieval using VECTOR_SEARCH()</span></div>
+    <pre><code><span class="cmt">-- RAG Pipeline: embed the user query, then find top-5 most similar chunks</span>
+
+<span class="kw">WITH</span> query_embedding <span class="kw">AS</span> (
+  <span class="cmt">-- Generate embedding for the user's natural language question</span>
+  <span class="kw">SELECT</span> ml_generate_embedding_result <span class="kw">AS</span> query_vector
+  <span class="kw">FROM</span> ML.GENERATE_EMBEDDING(
+    <span class="kw">MODEL</span> myDataset.embedding_model,
+    (<span class="kw">SELECT</span> <span class="str">'How many miles until I need an oil change?'</span> <span class="kw">AS</span> content),
+    <span class="kw">STRUCT</span>(<span class="str">'RETRIEVAL_QUERY'</span> <span class="kw">AS</span> task_type)
+  )
+),
+relevant_chunks <span class="kw">AS</span> (
+  <span class="cmt">-- Find the top-5 most semantically similar document chunks</span>
+  <span class="kw">SELECT</span>
+    base.doc_id,
+    base.chunk_text,
+    base.metadata,
+    distance
+  <span class="kw">FROM</span>
+    VECTOR_SEARCH(
+      <span class="kw">TABLE</span> myDataset.knowledge_embeddings,
+      <span class="str">'embedding'</span>,
+      (<span class="kw">SELECT</span> query_vector <span class="kw">FROM</span> query_embedding),
+      top_k =&gt; <span class="num">5</span>,
+      distance_type =&gt; <span class="str">'COSINE'</span>,
+      options =&gt; <span class="str">'{"fraction_lists_to_search": 0.1}'</span>
+    )
+)
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> relevant_chunks <span class="kw">ORDER BY</span> distance <span class="kw">ASC</span>;</code></pre>
+  </div>
+
+  <h3>Step 4: Generation — Full RAG Query</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Full end-to-end RAG with Gemini generation</span></div>
+    <pre><code><span class="kw">WITH</span> query_embedding <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> ml_generate_embedding_result <span class="kw">AS</span> qvec
+  <span class="kw">FROM</span> ML.GENERATE_EMBEDDING(
+    <span class="kw">MODEL</span> myDataset.embedding_model,
+    (<span class="kw">SELECT</span> <span class="str">'How many miles until oil change?'</span> <span class="kw">AS</span> content),
+    <span class="kw">STRUCT</span>(<span class="str">'RETRIEVAL_QUERY'</span> <span class="kw">AS</span> task_type)
+  )
+),
+top_chunks <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> base.chunk_text
+  <span class="kw">FROM</span> VECTOR_SEARCH(<span class="kw">TABLE</span> myDataset.knowledge_embeddings, <span class="str">'embedding'</span>,
+    (<span class="kw">SELECT</span> qvec <span class="kw">FROM</span> query_embedding), top_k =&gt; <span class="num">3</span>)
+),
+context_agg <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">STRING_AGG</span>(chunk_text, <span class="str">'\n---\n'</span>) <span class="kw">AS</span> context_text <span class="kw">FROM</span> top_chunks
+),
+prompt_table <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">CONCAT</span>(
+    <span class="str">'You are a helpful assistant. Answer the question based only on the provided context.\n\n'</span>,
+    <span class="str">'Context:\n'</span>, context_text,
+    <span class="str">'\n\nQuestion: How many miles until oil change?\nAnswer:'</span>
+  ) <span class="kw">AS</span> prompt
+  <span class="kw">FROM</span> context_agg
+)
+<span class="kw">SELECT</span> ml_generate_text_llm_result <span class="kw">AS</span> rag_answer
+<span class="kw">FROM</span> ML.GENERATE_TEXT(
+  <span class="kw">MODEL</span> myDataset.gemini_model,
+  <span class="kw">TABLE</span> prompt_table,
+  <span class="kw">STRUCT</span>(
+    <span class="num">0.1</span> <span class="kw">AS</span> temperature,
+    <span class="num">1024</span> <span class="kw">AS</span> max_output_tokens,
+    <span class="kw">TRUE</span> <span class="kw">AS</span> flatten_json_output
+  )
+);</code></pre>
+  </div>
+
+  <h3>Hybrid Search (Vector + Keyword)</h3>
+  <p>For production RAG, combine vector semantic search with traditional keyword search (BM25-style using LIKE or SEARCH) for better recall, then use Reciprocal Rank Fusion (RRF) to merge results:</p>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Hybrid Search with Reciprocal Rank Fusion</span></div>
+    <pre><code><span class="kw">WITH</span> vector_results <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> doc_id, chunk_text, ROW_NUMBER() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> distance <span class="kw">ASC</span>) <span class="kw">AS</span> v_rank
+  <span class="kw">FROM</span> VECTOR_SEARCH(<span class="kw">TABLE</span> myDataset.knowledge_embeddings, <span class="str">'embedding'</span>,
+    (<span class="kw">SELECT</span> qvec <span class="kw">FROM</span> query_embedding), top_k =&gt; <span class="num">20</span>)
+),
+keyword_results <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> doc_id, chunk_text, ROW_NUMBER() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> LENGTH(chunk_text) <span class="kw">DESC</span>) <span class="kw">AS</span> k_rank
+  <span class="kw">FROM</span> myDataset.knowledge_embeddings
+  <span class="kw">WHERE</span> <span class="fn">SEARCH</span>(chunk_text, <span class="str">'oil change miles'</span>)  <span class="cmt">-- BigQuery full-text search</span>
+  <span class="kw">LIMIT</span> <span class="num">20</span>
+),
+rrf_scores <span class="kw">AS</span> (
+  <span class="kw">SELECT</span>
+    <span class="fn">COALESCE</span>(v.doc_id, k.doc_id) <span class="kw">AS</span> doc_id,
+    <span class="fn">COALESCE</span>(v.chunk_text, k.chunk_text) <span class="kw">AS</span> chunk_text,
+    <span class="cmt">-- RRF formula: 1/(k + rank), k=60 is standard</span>
+    (<span class="fn">COALESCE</span>(<span class="num">1.0</span> / (<span class="num">60</span> + v.v_rank), <span class="num">0</span>) + <span class="fn">COALESCE</span>(<span class="num">1.0</span> / (<span class="num">60</span> + k.k_rank), <span class="num">0</span>)) <span class="kw">AS</span> rrf_score
+  <span class="kw">FROM</span> vector_results v <span class="kw">FULL OUTER JOIN</span> keyword_results k <span class="kw">USING</span>(doc_id)
+)
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> rrf_scores <span class="kw">ORDER BY</span> rrf_score <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="num">5</span>;</code></pre>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">💡 BigQuery RAG Advantages</div>
+    Unlike dedicated vector databases (Pinecone, Weaviate), BigQuery RAG keeps embeddings co-located with structured data — enabling hybrid queries that combine semantic search WITH SQL filters (e.g., "find semantically similar documents WHERE region = 'US' AND date > '2024-01-01'"). No data movement, no additional infrastructure.
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═════════════════════════════════════ 6. TROUBLESHOOTING -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <div>
+      <h2>Query Troubleshooting</h2>
+      <p>Diagnosing and resolving common BigQuery performance issues</p>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-header">
+      <div class="issue-icon">🐌</div>
+      <div class="issue-title">Issue: Slow Query / Full Table Scan</div>
+      <span class="tag tag-red" style="margin-left:auto">HIGH IMPACT</span>
+    </div>
+    <div class="issue-body">
+      <p><strong>Symptoms:</strong> Query scans entire table even with WHERE clause. High bytes processed. Long runtime.</p>
+      <p><strong>Root Cause:</strong> Missing or incorrect partition filter. Table not partitioned. Wrong column used in WHERE.</p>
+      <p><strong>Diagnosis:</strong> Check query plan in Console → "Execution details" tab. Look for "Input rows" at the scan stage.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">SQL</span><span>Fix: Partitioned Table with Clustered Columns</span></div>
+        <pre><code><span class="cmt">-- Before: Full scan (expensive)</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> myDataset.orders <span class="kw">WHERE</span> EXTRACT(<span class="kw">YEAR</span> <span class="kw">FROM</span> order_date) = <span class="num">2024</span>;
+<span class="cmt">-- BigQuery cannot prune partitions using functions on partition column!</span>
+
+<span class="cmt">-- After: Partition pruning (fast &amp; cheap)</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> myDataset.orders
+<span class="kw">WHERE</span> order_date <span class="kw">BETWEEN</span> <span class="str">'2024-01-01'</span> <span class="kw">AND</span> <span class="str">'2024-12-31'</span>;
+
+<span class="cmt">-- Create optimally partitioned + clustered table</span>
+<span class="kw">CREATE OR REPLACE TABLE</span> myDataset.orders_optimized
+  PARTITION <span class="kw">BY</span> <span class="fn">DATE</span>(order_date)
+  CLUSTER <span class="kw">BY</span> customer_id, region
+  OPTIONS (partition_expiration_days = <span class="num">365</span>)
+<span class="kw">AS SELECT</span> * <span class="kw">FROM</span> myDataset.orders;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-header">
+      <div class="issue-icon">⚖️</div>
+      <div class="issue-title">Issue: Data Skew in JOINs / GROUP BYs</div>
+      <span class="tag tag-red" style="margin-left:auto">HIGH IMPACT</span>
+    </div>
+    <div class="issue-body">
+      <p><strong>Symptoms:</strong> Most query stages finish quickly except one which runs for much longer. Execution plan shows one worker handling disproportionate data.</p>
+      <p><strong>Root Cause:</strong> Skewed distribution of values on JOIN key or GROUP BY key (e.g., NULL values, "unknown" category dominating).</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">SQL</span><span>Fix: Handle Skew with Salting or NULL filtering</span></div>
+        <pre><code><span class="cmt">-- Detect skew: find key distribution</span>
+<span class="kw">SELECT</span> customer_id, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> cnt
+<span class="kw">FROM</span> myDataset.orders
+<span class="kw">GROUP BY</span> customer_id
+<span class="kw">ORDER BY</span> cnt <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">10</span>;
+
+<span class="cmt">-- Fix 1: Filter NULLs before JOIN</span>
+<span class="kw">SELECT</span> o.*, c.name
+<span class="kw">FROM</span> myDataset.orders o
+<span class="kw">JOIN</span> myDataset.customers c <span class="kw">ON</span> o.customer_id = c.id
+<span class="kw">WHERE</span> o.customer_id <span class="kw">IS NOT NULL</span>;
+
+<span class="cmt">-- Fix 2: Pre-aggregate the large side before joining</span>
+<span class="kw">WITH</span> order_agg <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> customer_id, <span class="fn">SUM</span>(amount) <span class="kw">AS</span> total_spend
+  <span class="kw">FROM</span> myDataset.orders
+  <span class="kw">GROUP BY</span> customer_id
+)
+<span class="kw">SELECT</span> c.name, oa.total_spend
+<span class="kw">FROM</span> order_agg oa
+<span class="kw">JOIN</span> myDataset.customers c <span class="kw">USING</span>(customer_id);</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-header">
+      <div class="issue-icon">💾</div>
+      <div class="issue-title">Issue: Shuffle Data Spilled to Disk</div>
+      <span class="tag tag-yellow" style="margin-left:auto">MED IMPACT</span>
+    </div>
+    <div class="issue-body">
+      <p><strong>Symptoms:</strong> Query slower than expected. JOBS_TIMELINE shows high <code>shuffle_output_bytes_spilled_to_disk</code>.</p>
+      <p><strong>Root Cause:</strong> Intermediate data between query stages exceeds available shuffle memory. Often caused by large CROSSJOINs, many CTEs building up, or moving large datasets between stages.</p>
+      <p><strong>Fix:</strong> Break complex queries into smaller steps using temporary tables. Filter early. Avoid SELECT * in intermediate CTEs.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">SQL</span><span>Fix: Break into Temporary Tables</span></div>
+        <pre><code><span class="cmt">-- Instead of one complex 10-CTE query, use temp tables</span>
+<span class="kw">CREATE TEMP TABLE</span> filtered_orders <span class="kw">AS</span>
+<span class="kw">SELECT</span> order_id, customer_id, amount, order_date
+<span class="kw">FROM</span> myDataset.orders
+<span class="kw">WHERE</span> order_date &gt;= <span class="str">'2024-01-01'</span>
+  <span class="kw">AND</span> status = <span class="str">'COMPLETED'</span>;
+
+<span class="kw">CREATE TEMP TABLE</span> customer_summary <span class="kw">AS</span>
+<span class="kw">SELECT</span> customer_id, <span class="fn">SUM</span>(amount) <span class="kw">AS</span> total, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> orders
+<span class="kw">FROM</span> filtered_orders
+<span class="kw">GROUP BY</span> customer_id;
+
+<span class="kw">SELECT</span> c.name, cs.total, cs.orders
+<span class="kw">FROM</span> customer_summary cs
+<span class="kw">JOIN</span> myDataset.customers c <span class="kw">USING</span>(customer_id)
+<span class="kw">WHERE</span> cs.orders &gt; <span class="num">5</span>;</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-header">
+      <div class="issue-icon">⏳</div>
+      <div class="issue-title">Issue: Slot Contention / Queue Delays</div>
+      <span class="tag tag-yellow" style="margin-left:auto">MED IMPACT</span>
+    </div>
+    <div class="issue-body">
+      <p><strong>Symptoms:</strong> Queries are in PENDING state for a long time before starting. Multiple teams sharing slots.</p>
+      <p><strong>Root Cause:</strong> Insufficient slot capacity. All slots consumed by other concurrent queries. Common in on-demand or under-provisioned reservations.</p>
+      <p><strong>Fix:</strong> Use Reservations to isolate workloads. Set autoscaling max appropriately. Separate ETL, dashboarding, and ad-hoc workloads into separate reservations.</p>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-header">
+      <div class="issue-icon">🔄</div>
+      <div class="issue-title">Issue: Cartesian Product / Missing JOIN Condition</div>
+      <span class="tag tag-red" style="margin-left:auto">CRITICAL</span>
+    </div>
+    <div class="issue-body">
+      <p><strong>Symptoms:</strong> Query produces extremely large intermediate results. Bytes processed explodes. May hit resource limits.</p>
+      <p><strong>Root Cause:</strong> CROSS JOIN or accidental missing JOIN condition (e.g., joining on a constant, or omitting the ON clause).</p>
+      <p><strong>Fix:</strong> Always validate JOIN conditions. Use <code>EXPLAIN</code> or dry-run to estimate bytes before executing. Set <code>maximum_bytes_billed</code> as a safety net.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">SQL</span><span>Safety: Set Maximum Bytes Billed</span></div>
+        <pre><code><span class="cmt">-- bq CLI: fail if query would exceed 1 TB</span>
+bq query --maximum_bytes_billed=<span class="num">1000000000000</span> --use_legacy_sql=<span class="kw">false</span> \
+  <span class="str">'SELECT * FROM dataset.large_table'</span>
+
+<span class="cmt">-- Python client:</span>
+job_config = bigquery.QueryJobConfig(
+    maximum_bytes_billed=<span class="num">1_000_000_000_000</span>  <span class="cmt"># 1 TB limit</span>
+)</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═════════════════════════════════════ 7. SYSTEM TABLES -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <div>
+      <h2>INFORMATION_SCHEMA System Tables</h2>
+      <p>Read-only metadata views for monitoring, auditing, and troubleshooting</p>
+    </div>
+  </div>
+
+  <p>BigQuery's <code>INFORMATION_SCHEMA</code> provides read-only, system-defined views giving metadata about all BigQuery objects. These are your primary tools for observability, cost management, and performance analysis.</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">ℹ️ Query Syntax</div>
+    INFORMATION_SCHEMA queries must use <strong>GoogleSQL</strong> (not Legacy SQL). Always qualify with region: <code>`region-us`.INFORMATION_SCHEMA.JOBS</code> or <code>`region-eu`.INFORMATION_SCHEMA.JOBS</code>. Results are never cached — each query scans fresh metadata.
+  </div>
+
+  <h3>Key INFORMATION_SCHEMA Views</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>View</th><th>Scope</th><th>What It Shows</th><th>Common Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>JOBS</code> / <code>JOBS_BY_PROJECT</code></td><td>Project</td><td>All query/load/copy/extract jobs with timing, cost, bytes</td><td>Cost analysis, slow queries, user usage</td></tr>
+        <tr><td><code>JOBS_BY_USER</code></td><td>User</td><td>Jobs run by the current user only</td><td>Self-service usage monitoring</td></tr>
+        <tr><td><code>JOBS_BY_ORGANIZATION</code></td><td>Organization</td><td>All jobs across all projects in the org</td><td>Org-wide cost reporting</td></tr>
+        <tr><td><code>JOBS_TIMELINE</code> / <code>JOBS_TIMELINE_BY_PROJECT</code></td><td>Project</td><td>Per-second slot usage during job execution</td><td>Slot contention, capacity planning</td></tr>
+        <tr><td><code>TABLES</code></td><td>Dataset/Project</td><td>Table metadata: schema, row count, creation time, DDL</td><td>Schema discovery, catalog automation</td></tr>
+        <tr><td><code>TABLE_STORAGE</code> / <code>TABLE_STORAGE_BY_PROJECT</code></td><td>Project</td><td>Physical and logical storage per table</td><td>Storage cost allocation</td></tr>
+        <tr><td><code>COLUMNS</code></td><td>Dataset</td><td>Column names, types, descriptions, policy tags</td><td>Schema documentation, compliance</td></tr>
+        <tr><td><code>PARTITIONS</code></td><td>Dataset</td><td>Partition metadata, last modified time, rows, bytes</td><td>Incremental pipeline tracking</td></tr>
+        <tr><td><code>SCHEMATA</code></td><td>Project/Region</td><td>All datasets in project/region</td><td>Inventory, cross-dataset automation</td></tr>
+        <tr><td><code>ROUTINES</code></td><td>Dataset</td><td>Stored procedures, functions, DDL</td><td>Routine documentation</td></tr>
+        <tr><td><code>OBJECT_PRIVILEGES</code></td><td>Dataset</td><td>IAM bindings on dataset resources</td><td>Access audit</td></tr>
+        <tr><td><code>RESERVATIONS</code></td><td>Region</td><td>Slot reservations and their configurations</td><td>Capacity management</td></tr>
+        <tr><td><code>RESERVATION_CHANGES</code></td><td>Region</td><td>History of reservation changes</td><td>Capacity audit trail</td></tr>
+        <tr><td><code>CAPACITY_COMMITMENTS</code></td><td>Region</td><td>Committed slot purchases</td><td>Cost governance</td></tr>
+        <tr><td><code>STREAMING_TIMELINE_BY_PROJECT</code></td><td>Project</td><td>Streaming ingestion rates and errors</td><td>Streaming pipeline monitoring</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═════════════════════════════════════ 8. PERFORMANCE QUERIES -->
+<section class="section" id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <div>
+      <h2>Essential Performance & Monitoring Queries</h2>
+      <p>Production-ready INFORMATION_SCHEMA queries for daily operations</p>
+    </div>
+  </div>
+
+  <h3>1. Find the Most Expensive Queries (Last 30 Days)</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Top expensive queries by bytes billed</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  job_id,
+  user_email,
+  <span class="fn">ROUND</span>(total_bytes_billed / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">4</span>), <span class="num">4</span>)          <span class="kw">AS</span> tib_billed,
+  <span class="fn">ROUND</span>(total_bytes_billed / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">4</span>) * <span class="num">6.25</span>, <span class="num">4</span>)    <span class="kw">AS</span> estimated_cost_usd,
+  <span class="fn">TIMESTAMP_DIFF</span>(end_time, start_time, <span class="kw">SECOND</span>)           <span class="kw">AS</span> duration_secs,
+  total_slot_ms / <span class="num">1000</span>                                    <span class="kw">AS</span> slot_seconds,
+  creation_time,
+  <span class="fn">LEFT</span>(query, <span class="num">300</span>)                                        <span class="kw">AS</span> query_snippet
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+<span class="kw">WHERE</span>
+  creation_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>)
+  <span class="kw">AND</span> job_type    = <span class="str">'QUERY'</span>
+  <span class="kw">AND</span> state       = <span class="str">'DONE'</span>
+  <span class="kw">AND</span> error_result <span class="kw">IS NULL</span>
+<span class="kw">ORDER BY</span> total_bytes_billed <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">20</span>;</code></pre>
+  </div>
+
+  <h3>2. Slowest Running Queries (Last 7 Days)</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Slowest queries with performance insights</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  job_id,
+  user_email,
+  <span class="fn">TIMESTAMP_DIFF</span>(end_time, start_time, <span class="kw">SECOND</span>) <span class="kw">AS</span> duration_secs,
+  total_bytes_processed / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">3</span>)          <span class="kw">AS</span> gb_processed,
+  total_slot_ms / <span class="num">1000</span>                             <span class="kw">AS</span> slot_seconds,
+  performance_insights.avg_previous_execution_ms    <span class="kw">AS</span> avg_prev_exec_ms,
+  performance_insights.slot_contention              <span class="kw">AS</span> had_slot_contention,
+  creation_time,
+  <span class="fn">LEFT</span>(query, <span class="num">400</span>)                                 <span class="kw">AS</span> query_snippet
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+<span class="kw">WHERE</span>
+  creation_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">7</span> <span class="kw">DAY</span>)
+  <span class="kw">AND</span> job_type = <span class="str">'QUERY'</span>
+  <span class="kw">AND</span> state    = <span class="str">'DONE'</span>
+<span class="kw">ORDER BY</span> duration_secs <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">25</span>;</code></pre>
+  </div>
+
+  <h3>3. User-Level Cost Attribution</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Cost breakdown by user</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  user_email,
+  <span class="fn">COUNT</span>(*)                                            <span class="kw">AS</span> total_queries,
+  <span class="fn">COUNTIF</span>(error_result <span class="kw">IS NOT NULL</span>)                   <span class="kw">AS</span> failed_queries,
+  <span class="fn">ROUND</span>(<span class="fn">SUM</span>(total_bytes_billed) / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">4</span>), <span class="num">3</span>)    <span class="kw">AS</span> total_tib_billed,
+  <span class="fn">ROUND</span>(<span class="fn">SUM</span>(total_bytes_billed) / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">4</span>) * <span class="num">6.25</span>, <span class="num">2</span>) <span class="kw">AS</span> approx_cost_usd,
+  <span class="fn">ROUND</span>(<span class="fn">SUM</span>(total_slot_ms) / <span class="num">1000</span> / <span class="num">3600</span>, <span class="num">2</span>)          <span class="kw">AS</span> total_slot_hours,
+  <span class="fn">AVG</span>(<span class="fn">TIMESTAMP_DIFF</span>(end_time, start_time, <span class="kw">SECOND</span>))    <span class="kw">AS</span> avg_duration_secs
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+<span class="kw">WHERE</span>
+  creation_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>)
+  <span class="kw">AND</span> job_type = <span class="str">'QUERY'</span>
+<span class="kw">GROUP BY</span> user_email
+<span class="kw">ORDER BY</span> approx_cost_usd <span class="kw">DESC</span>;</code></pre>
+  </div>
+
+  <h3>4. Slot Utilization Over Time</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Daily slot utilization — capacity planning</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  <span class="fn">DATE</span>(creation_time)                                <span class="kw">AS</span> day,
+  <span class="fn">COUNT</span>(*)                                            <span class="kw">AS</span> total_jobs,
+  <span class="fn">ROUND</span>(<span class="fn">SUM</span>(total_slot_ms) / <span class="num">1000</span> / <span class="num">3600</span>, <span class="num">2</span>)         <span class="kw">AS</span> total_slot_hours,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(total_slot_ms) / <span class="num">1000</span>, <span class="num">1</span>)                <span class="kw">AS</span> avg_slot_sec_per_query,
+  <span class="fn">MAX</span>(total_slot_ms) / <span class="num">1000</span>                           <span class="kw">AS</span> max_slot_sec_single_query
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+<span class="kw">WHERE</span>
+  creation_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>)
+  <span class="kw">AND</span> job_type = <span class="str">'QUERY'</span>
+  <span class="kw">AND</span> state    = <span class="str">'DONE'</span>
+<span class="kw">GROUP BY</span> day
+<span class="kw">ORDER BY</span> day <span class="kw">DESC</span>;</code></pre>
+  </div>
+
+  <h3>5. Table Storage Cost Analysis</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Storage cost per table — physical vs logical</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  project_id,
+  dataset_id,
+  table_id,
+  <span class="fn">ROUND</span>(total_rows / <span class="num">1e6</span>, <span class="num">2</span>)                           <span class="kw">AS</span> total_rows_millions,
+  <span class="fn">ROUND</span>(total_logical_bytes / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">3</span>), <span class="num">2</span>)          <span class="kw">AS</span> logical_gb,
+  <span class="fn">ROUND</span>(total_physical_bytes / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">3</span>), <span class="num">2</span>)         <span class="kw">AS</span> physical_gb,
+  <span class="fn">ROUND</span>(total_logical_bytes / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">3</span>) * <span class="num">0.02</span>, <span class="num">4</span>)   <span class="kw">AS</span> est_monthly_cost_usd_logical,
+  last_modified_time
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.TABLE_STORAGE_BY_PROJECT
+<span class="kw">WHERE</span> total_logical_bytes &gt; <span class="num">0</span>
+<span class="kw">ORDER BY</span> total_logical_bytes <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">50</span>;</code></pre>
+  </div>
+
+  <h3>6. Failed Jobs Analysis</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Recent job failures with error details</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  job_id,
+  user_email,
+  creation_time,
+  job_type,
+  error_result.reason   <span class="kw">AS</span> error_reason,
+  error_result.message  <span class="kw">AS</span> error_message,
+  error_result.location <span class="kw">AS</span> error_location,
+  <span class="fn">LEFT</span>(query, <span class="num">400</span>)      <span class="kw">AS</span> query_snippet
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+<span class="kw">WHERE</span>
+  creation_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">7</span> <span class="kw">DAY</span>)
+  <span class="kw">AND</span> error_result <span class="kw">IS NOT NULL</span>
+<span class="kw">ORDER BY</span> creation_time <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">50</span>;</code></pre>
+  </div>
+
+  <h3>7. Query Performance Trend (Regression Detection)</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Track performance of a specific query pattern over time</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  <span class="fn">DATE</span>(creation_time)                                          <span class="kw">AS</span> day,
+  <span class="fn">COUNT</span>(*)                                                     <span class="kw">AS</span> execution_count,
+  <span class="fn">AVG</span>(<span class="fn">TIMESTAMP_DIFF</span>(end_time, start_time, <span class="kw">SECOND</span>))           <span class="kw">AS</span> avg_duration_secs,
+  <span class="fn">MAX</span>(<span class="fn">TIMESTAMP_DIFF</span>(end_time, start_time, <span class="kw">SECOND</span>))           <span class="kw">AS</span> max_duration_secs,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(total_bytes_processed) / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">3</span>), <span class="num">2</span>)          <span class="kw">AS</span> avg_gb_processed,
+  <span class="fn">COUNTIF</span>(cache_hit)                                           <span class="kw">AS</span> cache_hits
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_BY_PROJECT
+<span class="kw">WHERE</span>
+  creation_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">30</span> <span class="kw">DAY</span>)
+  <span class="kw">AND</span> job_type  = <span class="str">'QUERY'</span>
+  <span class="kw">AND</span> state     = <span class="str">'DONE'</span>
+  <span class="kw">AND</span> query     <span class="kw">LIKE</span> <span class="str">'%my_critical_table%'</span>    <span class="cmt">-- filter by query pattern</span>
+<span class="kw">GROUP BY</span> day
+<span class="kw">ORDER BY</span> day <span class="kw">DESC</span>;</code></pre>
+  </div>
+
+  <h3>8. Slot Contention — JOBS_TIMELINE</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Per-second slot usage for a specific job — diagnose contention</span></div>
+    <pre><code><span class="cmt">-- Replace 'your-job-id' with the actual job ID from JOBS view</span>
+<span class="kw">SELECT</span>
+  period_start,
+  period_slot_ms / <span class="num">1000</span>                                 <span class="kw">AS</span> slot_seconds,
+  shuffle_output_bytes / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">2</span>)                   <span class="kw">AS</span> shuffle_output_mb,
+  shuffle_output_bytes_spilled / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">2</span>)            <span class="kw">AS</span> spilled_mb,
+  <span class="fn">ROUND</span>(shuffle_output_bytes_spilled * <span class="num">100.0</span>
+        / <span class="fn">NULLIF</span>(shuffle_output_bytes, <span class="num">0</span>), <span class="num">1</span>)             <span class="kw">AS</span> pct_spilled
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.JOBS_TIMELINE_BY_PROJECT
+<span class="kw">WHERE</span>
+  job_id = <span class="str">'your-project:US.bquxjob_xxxx'</span>
+<span class="kw">ORDER BY</span> period_start;</code></pre>
+  </div>
+
+  <h3>9. Partition Metadata for Incremental Pipelines</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Find last modified partition — use in incremental ELT</span></div>
+    <pre><code><span class="kw">SELECT</span>
+  table_schema,
+  table_name,
+  partition_id,
+  total_rows,
+  <span class="fn">ROUND</span>(total_logical_bytes / <span class="fn">POW</span>(<span class="num">1024</span>, <span class="num">3</span>), <span class="num">3</span>) <span class="kw">AS</span> logical_gb,
+  last_modified_time
+<span class="kw">FROM</span> myDataset.INFORMATION_SCHEMA.PARTITIONS
+<span class="kw">WHERE</span>
+  table_name = <span class="str">'my_partitioned_table'</span>
+  <span class="kw">AND</span> last_modified_time &gt; <span class="fn">TIMESTAMP_SUB</span>(<span class="fn">CURRENT_TIMESTAMP</span>(), <span class="kw">INTERVAL</span> <span class="num">1</span> <span class="kw">DAY</span>)
+<span class="kw">ORDER BY</span> last_modified_time <span class="kw">DESC</span>;</code></pre>
+  </div>
+
+  <h3>10. Reservation &amp; Slot Commitment Overview</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Active reservations and commitments — capacity governance</span></div>
+    <pre><code><span class="cmt">-- Current reservations (requires bigquery.reservations.list permission)</span>
+<span class="kw">SELECT</span>
+  reservation_id,
+  slot_capacity,
+  ignore_idle_slots,
+  autoscale.current_slots   <span class="kw">AS</span> current_autoscale_slots,
+  autoscale.max_slots       <span class="kw">AS</span> max_autoscale_slots
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.RESERVATIONS_BY_PROJECT;
+
+<span class="cmt">-- Slot commitments (purchased capacity)</span>
+<span class="kw">SELECT</span>
+  commitment_id,
+  slot_count,
+  plan,
+  state,
+  renewal_plan,
+  commitment_start_time,
+  commitment_end_time
+<span class="kw">FROM</span> <span class="id">`region-us`</span>.INFORMATION_SCHEMA.CAPACITY_COMMITMENTS_BY_PROJECT
+<span class="kw">ORDER BY</span> commitment_start_time <span class="kw">DESC</span>;</code></pre>
+  </div>
+
+  <h3>Performance Troubleshooting Decision Tree</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Symptom</th><th>INFORMATION_SCHEMA Query</th><th>Likely Fix</th></tr></thead>
+      <tbody>
+        <tr><td>Query scans too much data</td><td>JOBS → <code>total_bytes_processed</code>, <code>total_bytes_billed</code></td><td>Add partition filter, cluster table, avoid <code>SELECT *</code></td></tr>
+        <tr><td>Query slow despite small data</td><td>JOBS_TIMELINE → <code>period_slot_ms</code>, check PENDING time</td><td>Slot contention; use dedicated reservation</td></tr>
+        <tr><td>Queries randomly slow</td><td>JOBS → <code>performance_insights.slot_contention = TRUE</code></td><td>Increase slot capacity or isolate workloads in reservations</td></tr>
+        <tr><td>Data spilling to disk</td><td>JOBS_TIMELINE → <code>shuffle_output_bytes_spilled</code></td><td>Break query into temp tables; filter early</td></tr>
+        <tr><td>High cost per user</td><td>JOBS → GROUP BY <code>user_email</code>, SUM bytes_billed</td><td>Set custom user-level quotas, require dry-run</td></tr>
+        <tr><td>Table growing unexpectedly</td><td>TABLE_STORAGE → track <code>total_logical_bytes</code> over time</td><td>Review DML patterns; set partition expiration</td></tr>
+        <tr><td>Incremental pipeline re-processing</td><td>PARTITIONS → <code>last_modified_time</code></td><td>Use watermark from PARTITIONS view instead of fixed dates</td></tr>
+        <tr><td>Job failures spiking</td><td>JOBS → <code>error_result IS NOT NULL</code>, GROUP BY reason</td><td>Identify error patterns; fix schema mismatches or resource limits</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">🏆 Principal Engineer Tip</div>
+    Build a <strong>BigQuery Observability Dashboard</strong> in Looker Studio (formerly Data Studio) backed by scheduled queries against INFORMATION_SCHEMA tables. Export daily snapshots to a separate monitoring dataset (since INFORMATION_SCHEMA only retains 180 days of job history). This gives you long-term trends, cost attribution by team, and automated anomaly alerts — critical for managing a production data platform at scale.
+  </div>
+
+  <!-- Final Quick Reference -->
+  <h3>Quick Reference: Critical SQL Patterns for Production</h3>
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">SQL</span><span>Production-critical patterns — commit to memory</span></div>
+    <pre><code><span class="cmt">═══ PARTITIONING BEST PRACTICES ═══</span>
+
+<span class="cmt">-- 1. Always use literal date range, never functions on partition column</span>
+<span class="kw">WHERE</span> event_date <span class="kw">BETWEEN</span> <span class="str">'2024-01-01'</span> <span class="kw">AND</span> <span class="str">'2024-12-31'</span>  <span class="cmt">-- ✅ PRUNED</span>
+<span class="kw">WHERE</span> <span class="fn">DATE</span>(event_timestamp) = <span class="str">'2024-01-01'</span>              <span class="cmt">-- ✅ PRUNED (timestamp partition)</span>
+<span class="kw">WHERE</span> EXTRACT(<span class="kw">YEAR</span> <span class="kw">FROM</span> event_date) = <span class="num">2024</span>            <span class="cmt">-- ❌ NOT PRUNED</span>
+
+<span class="cmt">═══ PERFORMANCE ANTI-PATTERNS TO AVOID ═══</span>
+
+<span class="cmt">-- 2. Avoid SELECT * (reads all columns — expensive in columnar storage)</span>
+<span class="kw">SELECT</span> *  <span class="kw">FROM</span> large_table                              <span class="cmt">-- ❌ expensive</span>
+<span class="kw">SELECT</span> id, name, amount <span class="kw">FROM</span> large_table              <span class="cmt">-- ✅ selective</span>
+
+<span class="cmt">-- 3. Approximate aggregation for dashboards (10-100x faster)</span>
+<span class="kw">SELECT</span> <span class="fn">APPROX_COUNT_DISTINCT</span>(user_id) <span class="kw">FROM</span> events     <span class="cmt">-- faster than COUNT(DISTINCT)</span>
+<span class="kw">SELECT</span> <span class="fn">APPROX_QUANTILES</span>(latency_ms, <span class="num">100</span>) <span class="kw">FROM</span> events   <span class="cmt">-- percentiles at scale</span>
+
+<span class="cmt">-- 4. FLATTEN nested structs instead of complex JSON parsing</span>
+<span class="kw">SELECT</span> e.user_id, tag
+<span class="kw">FROM</span> events e, <span class="fn">UNNEST</span>(e.tags) <span class="kw">AS</span> tag                 <span class="cmt">-- efficient array flattening</span>
+
+<span class="cmt">═══ COST CONTROLS ═══</span>
+
+<span class="cmt">-- 5. Preview cost before running (CLI)</span>
+bq query --dry_run --use_legacy_sql=<span class="kw">false</span> <span class="str">'SELECT ...'</span>
+
+<span class="cmt">-- 6. Fail-safe for ad-hoc queries (Python client)</span>
+job_config = bigquery.QueryJobConfig(maximum_bytes_billed=<span class="num">107374182400</span>)  <span class="cmt"># 100 GB max</span>
+
+<span class="cmt">═══ MATERIALIZED VIEW (auto-refresh) ═══</span>
+
+<span class="kw">CREATE MATERIALIZED VIEW</span> myDataset.daily_sales_mv
+OPTIONS (enable_refresh = <span class="kw">true</span>, refresh_interval_minutes = <span class="num">60</span>)
+<span class="kw">AS SELECT</span>
+  <span class="fn">DATE</span>(order_timestamp) <span class="kw">AS</span> order_date,
+  product_id,
+  <span class="fn">SUM</span>(amount)           <span class="kw">AS</span> daily_revenue,
+  <span class="fn">COUNT</span>(*)              <span class="kw">AS</span> order_count
+<span class="kw">FROM</span> myDataset.orders
+<span class="kw">GROUP BY</span> order_date, product_id;</code></pre>
+  </div>
+
+</section>
+
+
+</main>
+
+<footer>
+  <p style="font-size: 0.85rem; color: #6b7280;">&copy; 2026 Athisttaprabu Ramalingam. Lead & Principal Data Engineer Mastery Series.</p>
+</footer>
+
 </body>
-
 </html>

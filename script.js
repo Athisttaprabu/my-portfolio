@@ -170,4 +170,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // Check for hash on load to open Tech Articles Modal
+    if (window.location.hash === '#tech-articles') {
+        if (techModal) {
+            techModal.style.display = 'flex';
+            setTimeout(() => {
+                techModal.classList.add('show');
+            }, 100);
+        }
+    }
 });
